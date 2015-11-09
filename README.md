@@ -1,2 +1,2 @@
 # bluehill_submit
-The submit file
+The folder include the big homework of The database Design and Application

@@ -1,0 +1,52 @@
+<html>
+<?php
+  if (!empty($_COOKIE['username'])) {
+    $username = $_COOKIE['username'];
+    $dbuser = new WrapperDBUser();
+    $info = $dbuser->getuserinfo($username, $username);
+    $deptinfo = $dbuser->getdeptinfo($info['DeptID']);
+  }
+?>
+<form method="post" action="<?=$rootdir?>/bootstrap.php/user/updatebaseinfo?frommobile=0&username=<?=$_COOKIE['username']?>">
+    <table class="userdata_base_label">
+      <tbody>
+        <tr><th>员工ID:</th><td><?=$info['EmployeeID']?></td></tr>
+        <tr><th>用户名:</th><td><?=$_COOKIE['username']?></td></tr>
+        <tr><th>电子邮件:</th>
+          <td>
+            <label><?=$info['Email']?></label>
+            </td>
+        </tr>
+        <tr><th>部门名称:</th>
+          <td style="width: 380px;">
+            <label><?=$deptinfo['DeptName']?></label>
+          </td>
+        </tr>
+        <tr><th>经理名称:</th>
+          <td>
+            <label><?=$deptinfo['Name']?></label>
+            </td>
+        </tr>
+        <tr><th>分 机:</th>
+          <td><label><?=$info['Telephone']?></td>
+        </tr>
+        <tr><th>自我介绍:</th>
+          <td><textarea name="introduction"><?=$info['SelfIntro']?></textarea></td>
+        </tr>
+        <tr>
+          <td><button type="submit">保存</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <script>
+    $(function() {
+      $( "#datepicker" ).datepicker({
+        dateFormat: "yy年mm月dd日",
+        changeMonth: true,
+        changeYear: true
+      });
+    });
+  </script>
+</html>

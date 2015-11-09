@@ -1,0 +1,54 @@
+<html>
+  <div class="signinpanel">
+    <div class="row clearfix">
+      <div class="col-md-7">
+        <div class="signin-info">
+          <div class="logopanel">
+            <h1><span>互助行</span></h1>
+          </div><!-- logopanel -->
+
+          <div class="mb20"></div>
+
+          <h5><strong>让你的出行更有趣</strong></h5>
+          <ul>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i> 深度体验目的地风情</li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i> 快速找到当地人带你吃喝玩乐</li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i> 免费的住宿和交通工具</li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i> 当地传闻的深度讲解</li>
+            <li><i class="fa fa-arrow-circle-o-right mr5"></i> 你想要的一切当地服务</li>
+          </ul>
+          <div class="mb20"></div>
+          <strong>还没有注册互助行吗? <a href="signup.php">速度去注册</a></strong>
+        </div><!-- signin0-info -->
+
+      </div><!-- col-sm-7 -->
+
+      <div class="col-md-5">
+
+        <form method="post" action="<?=$rootdir?>/bootstrap.php/user/signin?frommobile=0" 
+          enctype="multipart/form-data">
+          <h4 class="nomargin">登录互助行</h4>
+
+          <input type="text" class="form-control uname" 
+          name="username" placeholder="手机号 / 用户名 / 邮箱" 
+          required="required" />
+          <input type="password" class="form-control pword" 
+            name="password" placeholder="密码" required="required" />
+          <a href=""><small>忘记密码?</small></a>
+
+          <?php
+          if (isset($_GET['fail']) && !empty($_GET['fail'])) {
+          ?>
+
+          <?php
+          }
+          ?>
+
+          <button class="btn btn-success btn-block" type="submit">登录</button>
+
+        </form>
+      </div><!-- col-sm-5 -->
+
+    </div><!-- row -->
+  </div><!-- signin -->
+</html>

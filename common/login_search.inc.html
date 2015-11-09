@@ -1,0 +1,33 @@
+<html>
+  <table width="1034" height="648" border="0" align="center" cellspacing="0">
+    <tr>
+        <td height="602" colspan="6"><img src="<?=$rootdir?>/images/login_search.jpg" width="1037" height="605" /></td>
+    </tr>
+    <tr>
+        <td>
+        <form method="post" action="<?=$rootdir?>/bootstrap.php/user/signin?frommobile=0" 
+          enctype="multipart/form-data">
+          <h4 class="nomargin">登录系统</h4>
+
+          <input type="text" class="form-control uname" 
+          name="username" placeholder="员工ID / 登陆名 / 邮箱" 
+          required="required" />
+          <input type="password" class="form-control pword" 
+            name="password" placeholder="密码" required="required" />
+          <a href=""><small>忘记密码?</small></a>
+
+          <?php
+          if (isset($_GET['fail']) && !empty($_GET['fail'])) {
+          ?>
+          print "wrong";
+          die;
+          <?php
+          }
+          ?>
+
+          <button class="btn btn-success btn-block" type="submit">登录</button>
+        </form>
+        </td>
+    </tr>
+  </table>
+</html>

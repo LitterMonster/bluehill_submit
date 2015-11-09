@@ -1,0 +1,45 @@
+<html>
+
+  <div style="float: none;">
+    <form style="float: none;" method="post" enctype="multipart/form-data" 
+      action="<?=$rootdir?>/bootstrap.php/user/updateavatar?frommobile=1&username=<?=$_COOKIE['username']?>">
+      <input type="file" id="fileBtn" name="avatar" onchange="previewImage(this)"></input>
+      <input type="hidden" name="x1" value="" />
+      <input type="hidden" name="y1" value="" />
+      <input type="hidden" name="x2" value="" />
+      <input type="hidden" name="y2" value="" />
+      <img id="avatarPreview" alt="预览图片" style="width: 800px;"></img>
+      <button type="submit">保存</button>
+    </form>
+  </div>
+
+ <script type="text/javascript">
+    function openFileDialog() { 
+      document.getElementById("fileBtn").click(); 
+    } 
+
+    function html5Reader(file, img) {
+      var file = file.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function(e) {
+        img.src=this.result;
+      }
+    }
+
+    function previewImage(file) {
+      html5Reader(file, document.getElementById("avatarPreview"));
+    }
+
+    $(document).ready(function () {
+      $('#avatarPreview').imgAreaSelect({
+        onSelectEnd: function (img, selection) {
+        $('input[name="x1"]').val(selection.x1);
+        $('input[name="y1"]').val(selection.y1);
+        $('input[name="x2"]').val(selection.x2);
+        $('input[name="y2"]').val(selection.y2);            
+      },
+      aspectRatio: '4:3', handles: true });
+    });
+ </script>
+</html>

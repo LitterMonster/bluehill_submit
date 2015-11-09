@@ -1,0 +1,60 @@
+<html>
+<?php
+$good = $_POST;
+$dbgood = new WrapperDBGood();
+$result = $dbgood->searchSofa($good);
+?>
+<center>
+  <p>搜索完成! 共<?=sizeof($result)?>条记录</p>
+  <table border = '1'>
+    <tr>
+      <td>商品id</td>
+      <td>沙发主姓名</td>
+      <td>沙发关系</td>
+      <td>标题</td>
+      <td>备注</td>
+      <td>详细地址</td>
+      <td>浴室</td>
+      <td>空调</td>
+      <td>洗衣机</td>
+      <td>厨房</td>
+      <td>wifi</td>
+      <td>接待人数</td>
+      <td>地址id</td>
+      <td>所在地类型</td>
+      <td>沙发类型</td>
+      <td>面积</td>
+      <td>隔离</td>
+      <td>居住类型</td>
+    </tr>
+    <?php 
+    for($i = 0; $i < sizeof($result); $i++) {
+        $ret = $result[$i];
+    ?>
+    <tr>
+      <td> <?=$ret['good_id'] ?> </td>
+      <td> <?=$ret['username'] ?> </td>
+      <td> <?=$ret['provider_ownership_id'] ?> </td>
+      <td> <?=$ret['title'] ?> </td>
+      <td> <?=$ret['comment'] ?> </td>
+      <td> <?=$ret['address_detail'] ?> </td>
+      <td> <?=$ret['bathroom'] ?> </td>
+      <td> <?=$ret['airconditioner'] ?> </td>
+      <td> <?=$ret['wash_machine'] ?> </td>
+      <td> <?=$ret['kitchen'] ?> </td>
+      <td> <?=$ret['wifi'] ?> </td>
+      <td> <?=$ret['capacity'] ?> </td>
+      <td> <?=$ret['address_id'] ?> </td>
+      <td> <?=$ret['location_type_id'] ?> </td>
+      <td> <?=$ret['bed_type_id'] ?> </td>
+      <td> <?=$ret['spacearea'] ?> </td>
+      <td> <?=$ret['saperated'] ?> </td>
+      <td> <?=$ret['residearea_type_id'] ?> </td>
+    </tr>
+    <?php
+    }
+    ?>
+  </table>
+</center>
+</html>
+

@@ -1,0 +1,11 @@
+.userdata_base_label {
+    text-align: left;
+}
+
+.userdata_base_label th {
+    width: 180px;
+}
+
+.input_oneline {
+    width: 280px;
+}

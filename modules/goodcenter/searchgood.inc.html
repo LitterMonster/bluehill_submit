@@ -1,0 +1,77 @@
+<html>
+<center>
+  <form method="post" action="searchgoodresult.php?frommobile=0&username=<?=$_COOKIE['username']?>">
+    <h1>搜索沙发</h1>
+    <hr/>
+    <h2>搜索沙发必填信息</h2>
+    <div>关键字<input type = "text" name = "keyword" size = "60"/></div>
+    <hr/>
+    <h2>搜索沙发选填信息</h2>
+    <div>
+      <div>
+        沙发与房主关系:&nbsp;&nbsp;
+        <label>物主<input type = "radio" name = "provider_ownership_id" value="1"/></label>
+        <label> 租用<input type = "radio" name = "provider_ownership_id" value="2"/></label>
+      </div>
+
+      <div>
+        沙发类型:&nbsp;&nbsp;
+        <label> 独立卧室<input type="radio" name="bed_type_id" value="1" /></label>
+        <label>客厅<input type="radio" name="bed_type_id" value="2" /></label>
+        <label>书房<input type="radio" name="bed_type_id" value="3" /></label>
+        <label>折叠床<input type="radio" name="bed_type_id" value="4" /></label>
+        <label>沙发<input type="radio" name="bed_type_id" value="5" /></label>
+        <label>阁楼<input type="radio" name="bed_type_id" value="6" /></label>
+        <label>地板<input type="radio" name="bed_type_id" value="7" /></label>
+      </div>
+      接待人数:
+      <select name = "capacity">
+        <option></option>
+        <option value = "1">1</option>
+        <option value = "2">2</option>
+        <option value = "3">3</option>
+        <option value = "4">4</option>
+        <option value = "5">5</option>
+        <option value = "6">6</option>
+        <option value = "7">7</option>
+        <option value = "8">8</option>
+        <option value = "9">9</option>
+        <option value = "10">10</option>
+      </select>
+    </div>
+      <div>
+      居住类型:&nbsp;&nbsp;
+      <label>民宿<input type="radio"  name="residearea_type_id" value="1" />
+        <label>小区<input type="radio" name="residearea_type_id" value="2" /></label>
+        <label>学校或工厂宿舍<input type="radio" name="residearea_type_id" value="3" /></label>
+        <label>高档小区<input type="radio" name="residearea_type_id" value="4" /></label>
+        <label>别墅<input type="radio" name="residearea_type_id" value="4" /></label>
+      </div>
+      <div>
+        所在地类型:&nbsp;&nbsp;
+        <label>市区<input type="radio" name="location_type_id" value="1" /></label>
+        <label>郊区<input type="radio" name="location_type_id" value="2" /></label>
+        <label>景区<input type="radio" name="location_type_id" value="3" /></label>
+      </div>
+      <div>
+        基础设施:&nbsp;&nbsp;
+        <label>浴室:<input type="checkbox" name="bathroom" value="true"  /></label>
+        <label>空调:<input type="checkbox" name="airconditioner" value="true" /></label>
+        <label>洗衣机:<input type="checkbox" name="wash_machine" value="true" /></label>
+        <label>厨房:<input type="checkbox" name="kitchen" value="true" /></label>
+        <label>WI-FI:<input type="checkbox" name="wifi" value="true" /></label>
+        <label>是否隔离:<input type="checkbox" name="saperated" value="true" /></label>
+        <label>房间面积:<input type="text" name="spacearea" value="0" size="2"/></label>
+      </div>
+      <div>
+        <input type = "reset" value="重置"/>
+      </div>
+      <hr/>
+      <div><button type = "submit" >搜索</button></div>
+    </form>
+  </center>
+  <script type="text/javascript">
+addressInit('province', 'city', 'area');
+  </script>
+ </html>
+

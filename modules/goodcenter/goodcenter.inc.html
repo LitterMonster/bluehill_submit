@@ -1,0 +1,44 @@
+<html>
+  <div class="tabs">
+    <ul class="tab-links">
+      <li class="active"><a href="#releasegood">发布沙发</a></li>
+      <li><a href="#searchgood">搜索沙发</a></li>
+      <li><a href="#updategood">更改沙发</a></li>
+      <li><a href="#removegood">删除沙发</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="releasegood" class="tab active">
+        <?php include('releasegood.inc.html'); ?>
+      </div>
+
+      <div id="searchgood" class="tab">
+        <?php include('searchgood.inc.html'); ?>
+      </div>
+
+      <div id="updategood" class="tab">
+        <?php include('updategood.inc.html'); ?>
+      </div>
+
+      <div id="removegood" class="tab">
+        <?php include('deletegood.inc.html'); ?>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

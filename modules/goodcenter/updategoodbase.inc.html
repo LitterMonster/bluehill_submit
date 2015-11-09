@@ -1,0 +1,297 @@
+<html>
+<?php
+if(!empty($_COOKIE['username'])) {
+$goodid =$_GET['goodid'];
+$dbgood = new WrapperDBGood();
+$ret = $dbgood->getSofaInfoBygoodid($goodid);
+} else {
+print "<script language='javascript' type = 'text/javascript'>
+alert('用户名为空，请先登陆!');</script>";
+$url = $rootdir."/modules/usercenter/signin.php".
+"?fail=".InterfaceError::getErrorMessage(
+InterfaceError::ERR_INVALIDPARAMS);
+print "<script language='javascript' type = 'text/javascript'>
+window.location.href = '$url';</script>";
+}
+?>
+<form method="post" action="<?=$rootdir?>/bootstrap.php/good/update?frommobile=0&username=<?=$_COOKIE['username']?>&good_id=<?=$goodid?>">
+
+  <h1>沙发详细信息</h1>
+  <hr/>
+  <div>标题:<input type = "text" name = "title" value="<?= $ret['title']?>"/></div>
+  <div>选择照片:<input type = "file" name = "photosid"/></div>
+
+  <div>接待人数:
+    <select name = 'capacity'>
+      <option value = "<?= $ret['capacity']?>"><?= $ret['capacity']?></option>
+      <option value = '1'>1</option>
+      <option value = '2'>2</option>
+      <option value = '3'>3</option>
+      <option value = '4'>4</option>
+      <option value = '5'>5</option>
+      <option value = '6'>6</option>
+      <option value = '7'>7</option>
+      <option value = '8'>8</option>
+      <option value = '9'>9</option>
+      <option value = '10'>10</option>
+    </select>
+  </div>
+
+  <div>
+    沙发与房主关系:&nbsp;&nbsp;
+    <?php
+    if($ret['provider_ownership_id'] == "物主") {
+    ?>
+    <label>物主<input type = 'radio' name = 'provider_ownership_id' checked='checked' value='1'/></label>
+    <label> 租用<input type = 'radio' name = 'provider_ownership_id' value='2'/></label>
+    <?php
+    } else {
+    ?>
+    <label>物主<input type = 'radio' name = 'provider_ownership_id' value='1'/></label>
+    <label> 租用<input type = 'radio' name = 'provider_ownership_id' checked='checked' value='2'/></label>
+    <?php
+    }
+    ?>
+  </div>
+
+  <div>
+    沙发类型:&nbsp;&nbsp;
+    <?php
+    if($ret['bed_type_id'] == "独立卧室") {
+    ?>
+    <label> 独立卧室<input type='radio' checked='checked' name='bed_type_id' value='1' /></label>
+    <label>客厅<input type='radio' name='bed_type_id' value='2' /></label>
+    <label>书房<input type='radio' name='bed_type_id' value='3' /></label>
+    <label>折叠床<input type='radio' name='bed_type_id' value='4' /></label>
+    <label>沙发<input type='radio' name='bed_type_id' value='5' /></label>
+    <label>阁楼<input type='radio' name='bed_type_id' value='6' /></label>
+    <label>地板<input type='radio' name='bed_type_id' value='7' /></label>
+    <?php
+    } else if($ret['bed_type_id'] == "客厅") {
+    ?>
+    <label> 独立卧室<input type='radio' name='bed_type_id' value='1' /></label>
+    <label>客厅<input type='radio'  checked='checked' name='bed_type_id' value='2' /></label>
+    <label>书房<input type='radio' name='bed_type_id' value='3' /></label>
+    <label>折叠床<input type='radio' name='bed_type_id' value='4' /></label>
+    <label>沙发<input type='radio' name='bed_type_id' value='5' /></label>
+    <label>阁楼<input type='radio' name='bed_type_id' value='6' /></label>
+    <label>地板<input type='radio' name='bed_type_id' value='7' /></label>
+    <?php
+    } else if($ret['bed_type_id'] == "书房") {
+    ?>
+
+    <label> 独立卧室<input type='radio' name='bed_type_id' value='1' /></label>
+    <label>客厅<input type='radio' name='bed_type_id' value='2' /></label>
+    <label>书房<input type='radio'   checked='checked' name='bed_type_id' value='3' /></label>
+    <label>折叠床<input type='radio' name='bed_type_id' value='4' /></label>
+    <label>沙发<input type='radio' name='bed_type_id' value='5' /></label>
+    <label>阁楼<input type='radio' name='bed_type_id' value='6' /></label>
+    <label>地板<input type='radio' name='bed_type_id' value='7' /></label>
+    <?php
+    } else if($ret['bed_type_id'] == "折叠床") {
+    ?>
+    <label> 独立卧室<input type='radio' name='bed_type_id' value='1' /></label>
+    <label>客厅<input type='radio' name='bed_type_id' value='2' /></label>
+    <label>书房<input type='radio' name='bed_type_id' value='3' /></label>
+    <label>折叠床<input type='radio'  checked='checked' name='bed_type_id' value='4' /></label>
+    <label>沙发<input type='radio' name='bed_type_id' value='5' /></label>
+    <label>阁楼<input type='radio' name='bed_type_id' value='6' /></label>
+    <label>地板<input type='radio' name='bed_type_id' value='7' /></label>
+    <?php
+    } else if($ret['bed_type_id'] == "沙发") {
+    ?>
+    <label> 独立卧室<input type='radio' name='bed_type_id' value='1' /></label>
+    <label>客厅<input type='radio' name='bed_type_id' value='2' /></label>
+    <label>书房<input type='radio' name='bed_type_id' value='3' /></label>
+    <label>折叠床<input type='radio' name='bed_type_id' value='4' /></label>
+    <label>沙发<input type='radio'  checked='checked' name='bed_type_id' value='5' /></label>
+    <label>阁楼<input type='radio' name='bed_type_id' value='6' /></label>
+    <label>地板<input type='radio' name='bed_type_id' value='7' /></label>
+    <?php
+    } else if($ret['bed_type_id'] == "阁楼") {
+    ?>
+    <label> 独立卧室<input type='radio' name='bed_type_id' value='1' /></label>
+    <label>客厅<input type='radio' name='bed_type_id' value='2' /></label>
+    <label>书房<input type='radio' name='bed_type_id' value='3' /></label>
+    <label>折叠床<input type='radio' name='bed_type_id' value='4' /></label>
+    <label>沙发<input type='radio' name='bed_type_id' value='5' /></label>
+    <label>阁楼<input type='radio'   checked='checked' name='bed_type_id' value='6' /></label>
+    <label>地板<input type='radio' name='bed_type_id' value='7' /></label>
+    <?php
+    } else if($ret['bed_type_id'] == "地板") {
+    ?>
+
+    <label> 独立卧室<input type='radio' name='bed_type_id' value='1' /></label>
+    <label>客厅<input type='radio' name='bed_type_id' value='2' /></label>
+    <label>书房<input type='radio' name='bed_type_id' value='3' /></label>
+    <label>折叠床<input type='radio' name='bed_type_id' value='4' /></label>
+    <label>沙发<input type='radio' name='bed_type_id' value='5' /></label>
+    <label>阁楼<input type='radio' name='bed_type_id' value='6' /></label>
+    <label>地板<input type='radio' checked='checked' name='bed_type_id' value='7' /></label>
+    <?php
+    }
+    ?>
+  </div>
+
+  <div>
+    <div>
+      省：<select id='province' name='province'></select>
+      市：<select id='city' name='city'></select>
+      区：<select id='area' name='area'></select>
+      详细地址<input type='text' name='address_detail' value = "<?=$ret['address_detail']?>" /></div>
+
+    <div>居住地类型:&nbsp;&nbsp;
+      <?php
+      if($ret['residearea_type_id'] == "民宿") {
+      ?>
+      <label>民宿<input type='radio' checked='checked' name='residearea_type_id' value='1' />
+        <label>小区<input type='radio' name='residearea_type_id' value='2' /></label>
+        <label>学校或工厂宿舍<input type='radio' name='residearea_type_id' value='3' /></label>
+        <label>高档小区<input type='radio' name='residearea_type_id' value='4' /></label>
+        <label>别墅<input type='radio' name='residearea_type_id' value='5' /></label>
+        <?php
+        } else if ($ret['residearea_type_id'] == "小区") {
+        ?>
+        <label>民宿<input type='radio' name='residearea_type_id' value='1' />
+          <label>小区<input type='radio'  checked='checked' name='residearea_type_id' value='2' /></label>
+          <label>学校或工厂宿舍<input type='radio' name='residearea_type_id' value='3' /></label>
+          <label>高档小区<input type='radio' name='residearea_type_id' value='4' /></label>
+          <label>别墅<input type='radio' name='residearea_type_id' value='5' /></label>
+          <?php
+          } else if ($ret['residearea_type_id'] == "学校或工厂宿舍") {
+          ?>
+          <label>民宿<input type='radio' name='residearea_type_id' value='1' />
+            <label>小区<input type='radio' name='residearea_type_id' value='2' /></label>
+            <label>学校或工厂宿舍<input type='radio'  checked='checked' name='residearea_type_id' value='3' /></label>
+            <label>高档小区<input type='radio' name='residearea_type_id' value='4' /></label>
+            <label>别墅<input type='radio' name='residearea_type_id' value='5' /></label>
+            <?php
+            } else if ($ret['residearea_type_id'] == "高档小区") {
+            ?>
+            <label>民宿<input type='radio' name='residearea_type_id' value='1' />
+              <label>小区<input type='radio' name='residearea_type_id' value='2' /></label>
+              <label>学校或工厂宿舍<input type='radio'  name='residearea_type_id' value='3' /></label>
+              <label>高档小区<input type='radio' checked='checked' name='residearea_type_id' value='4' /></label>
+              <label>别墅<input type='radio' name='residearea_type_id' value='5' /></label>
+              <?php
+              } else if ($ret['residearea_type_id'] == "别墅") {
+              ?>
+              <label>民宿<input type='radio' name='residearea_type_id' value='1' />
+                <label>小区<input type='radio' name='residearea_type_id' value='2' /></label>
+                <label>学校或工厂宿舍<input type='radio'  name='residearea_type_id' value='3' /></label>
+                <label>高档小区<input type='radio' name='residearea_type_id' value='4' /></label>
+                <label>别墅<input type='radio'  checked='checked' name='residearea_type_id' value='5' /></label>
+                <?php
+                }
+                ?>
+              </div>
+
+              <div>地区类型:&nbsp;&nbsp;
+                <?php
+                if($ret['location_type_id'] == "市区") {
+                ?>
+                <label>市区<input type='radio' checked='checked' name='location_type_id' value='1' /></label>
+                <label>郊区<input type='radio' name='location_type_id' value='2' /></label>
+                <label>景区<input type='radio' name='location_type_id' value='3' /></label>
+                <?php
+                } else if($ret['location_type_id'] == "郊区") {
+                ?>
+                <label>市区<input type='radio' name='location_type_id' value='1' /></label>
+                <label>郊区<input type='radio' checked='checked'name='location_type_id' value='2' /></label>
+                <label>景区<input type='radio' name='location_type_id' value='3' /></label>
+                <?php
+                } else if($ret['location_type_id'] == "景区") {
+                ?>
+                <label>市区<input type='radio' name='location_type_id' value='1' /></label>
+                <label>郊区<input type='radio' name='location_type_id' value='2' /></label>
+                <label>景区<input type='radio' checked='checked' name='location_type_id' value='3' /></label>
+                <?php
+                }
+                ?>
+              </div>
+              <div>备注信息:<input type='text' cols = '30' rows = '5' name = 'comment' value ="<?=$ret['comment']?>"/></div>
+            </div>
+            <?php
+            if(($ret['bathroom']) == "是") {
+            ?>
+            <div>
+              <label>浴室:<input type='checkbox' name='bathroom' checked = 'checked' value='true'  /></label>
+              <?php
+              } else {
+              ?>
+              <div>
+                <label>浴室:<input type='checkbox' name='bathroom' value='true'  /></label>
+                <?php
+                }
+                ?>
+
+                <?php
+                if(($ret['airconditioner']) == "是") {
+                ?>    
+                <label>空调:<input type='checkbox' name='airconditioner' checked = 'checked' value='true' /></label>
+                <?php
+                } else {
+                ?>    
+                <label>空调:<input type='checkbox' name='airconditioner' value='true' /></label>
+                <?php
+                }
+                ?>
+
+                <?php
+                if(($ret['wash_machine']) == "是") {
+                ?>    
+                <label>洗衣机:<input type='checkbox' name='wash_machine' checked = 'checked' value='true' /></label>
+                <?php
+                } else {
+                ?>    
+                <label>洗衣机:<input type='checkbox' name='wash_machine' value='true' /></label>
+                <?php
+                }
+                ?>
+                <?php
+                if(($ret['kitchen']) == "是") {
+                ?>    
+                <label>厨房:<input type='checkbox' name='kitchen'  checked = 'checked 'value='true' /></label>
+                <?php
+                } else{  
+                ?>    
+                <label>厨房:<input type='checkbox' name='kitchen'  value='true' /></label>
+                <?php
+                }
+                ?>
+
+                <?php
+                if(($ret['wifi']) == "是") {
+                ?>    
+                <label>WI-FI:<input type='checkbox' name='wifi'  checked = 'checked' value='true' /></label>
+                <?php
+                } else {  
+                ?>    
+                <label>WI-FI:<input type='checkbox' name='wifi' value='true' /></label>
+                <?php
+                } 
+                ?>
+                <?php
+                if(($ret['saperated']) == "是") {
+                ?>    
+                <label>是否隔离:<input type='checkbox' name='saperated' checked = 'checked' value='true' /></label>
+                <?php
+                }else{
+                ?>    
+                <label>是否隔离:<input type='checkbox' name='saperated' value='true' /></label>
+                <?php
+                }
+                ?>
+
+                <label>房间面积:<input type='text' name='spacearea' value="<?=$ret['spacearea']?>" ></label>
+              </div>
+
+              <hr/>
+              <div><button type = 'submit'>提交</button></div>
+            </form>
+            <hr/>
+            <script type="text/javascript" src="jsAddress.js"></script>
+            <script type="text/javascript">
+addressInit('province', 'city', 'area');
+            </script>
+            </html>

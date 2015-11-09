@@ -1,0 +1,31 @@
+<html>
+  <div class="signuppanel">
+
+    <div class="row">
+      <form method="post" action="<?=$rootdir?>/bootstrap.php/user/signup?frommobile=0">
+
+        <h2 class="nomargin">注册互助行</h2>
+        <p class="mt5 mb20">已注册互助行? <a href="signin.php"><strong>去登录</strong></a></p>
+
+        <div class="mb10">
+          <label class="control-label">用户名</label>
+          <input type="text" name="username" class="form-control" required="required" />
+        </div>
+
+        <div class="mb10">
+          <label class="control-label">密码</label>
+          <input type="password" name="password" class="form-control" required="required" />
+        </div>
+
+        <div class="mb10">
+          <label class="control-label">确认密码</label>
+          <input type="password" name="confirmpwd" class="form-control" required="required" />
+        </div>
+
+        <br />
+
+        <button class="btn btn-success btn-block" type="submit">注册</button>     
+      </form>
+    </div><!-- row -->
+  </div>
+</html>

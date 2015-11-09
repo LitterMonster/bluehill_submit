@@ -1,0 +1,22 @@
+<html>
+<?php
+  if (!empty($_COOKIE['username'])) {
+    $username = $_COOKIE['username'];
+    $dbuser = new WrapperDBUser();
+    $info = $dbuser->getuserinfo($username, $username);
+  }
+?>
+<form method="post" action="<?=$rootdir?>/bootstrap.php/user/updatebaseinfo?frommobile=0&username=<?=$_COOKIE['username']?>">
+    <table class="userdata_base_label">
+      <tbody>
+        <tr><th>用户名</th><td><?=$_COOKIE['username']?></td></tr>
+        <tr><th>新密码</th>
+          <td><input type="password" name="password"/></td>
+        </tr>
+        <tr>
+          <td><button type="submit">保存</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</html>

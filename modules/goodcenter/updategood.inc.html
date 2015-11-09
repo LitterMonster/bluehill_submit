@@ -1,0 +1,72 @@
+<html>
+<h2>沙发详细信息:</h2>
+<?php
+if (!empty($_COOKIE['username'])) {
+$username = $_COOKIE['username'];
+$dbuser = new WrapperDBUser();
+$userid = $dbuser->getUid($username);
+$dbgood = new WrapperDBGood();
+$ret = $dbgood->getSofaInfoByuid($userid);
+} else {
+print "<script language='javascript' type = 'text/javascript'
+>alert('用户名为空,请先登陆!');</script>";
+$url = $rootdir."/modules/usercenter/signin.php".
+"?fail=".InterfaceError::getErrorMessage(
+InterfaceError::ERR_INVALIDPARAMS);
+print "<script language='javascript' type = 'text/javascript'>
+window.location.href = '$url';</script>";
+}
+?>
+<h3>搜索完成,共有<?=sizeof($ret)?>条记录!</h3>
+  <table border = "1">
+    <tr>
+      <td>商品id</td>
+      <td>沙发主姓名</td>
+      <td>沙发关系</td>
+      <td>标题</td>
+      <td>备注</td>
+      <td>详细地址</td>
+      <td>浴室</td>
+      <td>空调</td>
+      <td>洗衣机</td>
+      <td>厨房</td>
+      <td>wifi</td>
+      <td>接待人数</td>
+      <td>地址id</td>
+      <td>所在地类型</td>
+      <td>沙发类型</td>
+      <td>面积(㎡)</td>
+      <td>隔离</td>
+      <td>居住类型</td>
+      <td>修改</td>
+    </tr>
+    <?php
+    for($i = 0; $i < sizeof($ret); $i++) {
+    $temp = $ret[$i];
+    ?>
+    <tr>
+      <td> <?=$temp['good_id'] ?> </td>
+      <td> <?=$temp['username'] ?> </td>
+      <td> <?=$temp['provider_ownership_id'] ?> </td>
+      <td> <?=$temp['title'] ?> </td>
+      <td> <?=$temp['comment'] ?> </td>
+      <td> <?=$temp['address_detail'] ?> </td>
+      <td> <?=$temp['bathroom'] ?> </td>
+      <td> <?=$temp['airconditioner'] ?> </td>
+      <td> <?=$temp['wash_machine'] ?> </td>
+      <td> <?=$temp['kitchen'] ?> </td>
+      <td> <?=$temp['wifi'] ?> </td>
+      <td> <?=$temp['capacity'] ?> </td>
+      <td> <?=$temp['address_id'] ?> </td>
+      <td> <?=$temp['location_type_id'] ?> </td>
+      <td> <?=$temp['bed_type_id'] ?> </td>
+      <td> <?=$temp['spacearea'] ?> </td>
+      <td> <?=$temp['saperated'] ?> </td>
+      <td> <?=$temp['residearea_type_id'] ?> </td>
+      <td> <form action = "updategoodbase.php?goodid= <?=$temp['good_id'] ?>&username=<?=$_COOKIE['username']?>" method = 'POST'><input type='submit' value='修改'/></form> </td>
+    </tr>
+    <?php
+    }
+    ?>
+  </table>
+  </html>

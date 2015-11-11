@@ -91,6 +91,42 @@ class DBHTWUser extends DBHelpTheWorld {
         //return $ret;
     }
 
+    public function getleaveinfo($username)
+    {
+        $employeeID = $this->getuserinfo($username)['EmployeeID'];
+
+        $sql = "SELECT * FROM tblLeave WHERE EmployeeID = $employeeID";
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+        return $ret;
+    }
+
+    public function getusedhours($username)
+    {
+        if (empty($username))
+        {
+            return InterfaceError::ERR_OK;
+        }
+
+        $leaveinfo = $this->getleaveinfo($username);
+
+        $counthours = 0;
+        for ($i = 0; $i < sizeof($leaveinfo); $i++)
+        {
+            if ($leaveinfo[$i]['Status'] != "已否决" &&
+            $leaveinfo[$i]['Status'] != "已取消")
+            {
+                $counthours += $leaveinfo[$i]['Hours'];
+            }
+        }
+
+        return $counthours;
+    }
+
     private function reorganizeSecureInfo($secureinfo) {
         if (empty($secureinfo)) {
             return $secureinfo;
@@ -253,13 +289,13 @@ class DBHTWUser extends DBHelpTheWorld {
      *      After login, the user information will be returned
      *      When another guy want to look the profile of another guy
      */
-    public function getuserinfo($requestuser, $requesteduser) {
-        if (empty($requestuser) || empty($requesteduser)) {
+    public function getuserinfo($username) {
+        if (empty($username)) {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
 
         $sql = 'SELECT * FROM tblEmployee  '.
-            'where LoginName=\''.$requesteduser.'\' LIMIT 1';
+            'where LoginName=\''.$username.'\' LIMIT 1';
         $ret = $this->runSQL($sql);
         if (0 == sizeof($ret)) {
            return InterfaceError::ERR_NOSUCHUSER; 
@@ -290,6 +326,7 @@ class DBHTWUser extends DBHelpTheWorld {
         $managername = $ret[0];
         return $managername;
     }
+
     public function getsecureinfo($requestuser, $requesteduser) {
         $ret = $this->getinfo($requestuser, $requesteduser);
 

@@ -33,14 +33,14 @@ class WrapperDBUser {
         return $ret;
     }
 
-    public function getuserinfo($requestuser, $requesteduser) {
+    public function getuserinfo($username) {
         $dbhtwuser = new DBHTWUser();
 
-        if (empty($requestuser) || empty($requesteduser)) {
+        if (empty($username)) {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
 
-        $ret = $dbhtwuser->getuserinfo($requestuser, $requesteduser);
+        $ret = $dbhtwuser->getuserinfo($username);
         return $ret;
     }
 
@@ -54,6 +54,23 @@ class WrapperDBUser {
             die;
         }
         $ret = $dbhtwuser->getdeptinfo($deptid);
+        return $ret;
+    }
+
+    /*
+     * Input: Employee's name
+     * Output:Employee's used hours of the YearHoliday !
+     * Date:2015-11-12 Author:Zhangtao
+     */
+    public function getusedhours($username)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($username)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getusedhours($username);
         return $ret;
     }
 

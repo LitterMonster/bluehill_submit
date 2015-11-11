@@ -1,0 +1,25 @@
+<html>
+  <?php
+  if (!empty($_COOKIE['username'])) {
+  $username = $_COOKIE['username'];
+  $dbuser = new WrapperDBUser();
+  $usedhours = $dbuser->getusedhours($username);
+  }
+  ?>
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+      <tr><td>总小时数</td><td>已用小时数</td><td>剩余小时数</td></tr>
+      <tr><td>80</td><td><?=$usedhours?></td><td><?=(80-$usedhours)?></td></tr>
+    </tbody>
+  </table>
+
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

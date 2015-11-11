@@ -3,7 +3,7 @@
   if (!empty($_COOKIE['username'])) {
     $username = $_COOKIE['username'];
     $dbuser = new WrapperDBUser();
-    $info = $dbuser->getuserinfo($username, $username);
+    $info = $dbuser->getuserinfo($username);
     $deptinfo = $dbuser->getdeptinfo($info['DeptID']);
   }
 ?>

@@ -1,0 +1,597 @@
+#!/bin/bash
+
+if [ ! -z $* ]; then
+    export $*
+fi
+
+DBUSERNAME="root"
+DBPASSWORD="12345678"
+DBDELETEEXISTS=false
+DBNAME="bluehill_db"
+
+TIMESTAMP=`date +%Y%m%d%H%M%S`  
+DBLOG=dblog_${TIMESTAMP}.log;
+
+if [ x"$delete_exists" = xtrue ]; then
+    DBDELETEEXISTS=true
+fi
+
+if [ x"$DBDELETEEXISTS" = xtrue ]; then
+    echo "Are you sure you want to delete $DBNAME ? (y/n)"
+    read DBDELETEEXISTS
+    if [ x"$DBDELETEEXISTS" = xy ]; then
+        DBDELETEEXISTS=true
+    else
+        DBDELETEEXISTS=false
+    fi
+fi
+
+function operate_db() {
+    sql=$1
+
+    if [ -z "$sql" ]; then
+        return
+    fi
+
+    echo "Run SQL: $sql with $DBUSERNAME - $DBPASSWORD"
+
+    mysql -u$DBUSERNAME -p$DBPASSWORD -e "
+        tee /tmp/dbsql_temp.log
+        $sql;
+        notee
+        quit"
+
+    if [ -f "/tmp/dbsql_temp.log" ]; then
+        cat /tmp/dbsql_temp.log >> $DBLOG
+    fi
+}
+
+function delete_db() {
+    db=$1
+    
+    if [ -z $db ]; then
+        return
+    fi
+
+sql="DROP DATABASE IF EXISTS $db; 
+SHOW DATABASES;"
+operate_db "$sql"
+}
+
+function use_db() {
+    db=$1
+    
+    if [ -z $db ]; then
+        return
+    fi
+
+    sql="USE $db; SHOWTABLES $db"
+    operate_db "$sql"
+}
+
+function create_db() {
+    db=$1
+    
+    if [ -z $db ]; then
+        return
+    fi
+
+    sql="CREATE DATABASE IF NOT EXISTS $db;
+         SHOW DATABASES; USE $db; SHOW TABLES"
+    operate_db "$sql"
+}
+
+if [ $DBDELETEEXISTS ]; then
+    delete_db $DBNAME
+fi
+
+create_db $DBNAME
+
+function delete_table() {
+    tablle=$1
+
+    if [ -z $table ]; then
+        return
+    fi
+
+    sql="USE $DBNAME; DROP TABLE IF EXISTS $table; 
+         SHOW TABLES";
+    operate_db $sql
+}
+
+function create_table() {
+    table=$1
+    cols=$2
+
+    if [ -z $table -o -z "$cols" ]; then
+        return
+    fi
+
+    sql="USE $DBNAME; CREATE TABLE IF NOT EXISTS 
+        $table ($cols) CHARACTER SET = 'utf8';
+        SHOW FIELDS FROM $table"
+    operate_db "$sql"
+}
+
+function add_table_constraint() {
+    table=$1
+    constraint=$2
+
+    if [ -z $table -o -z "$constraint" ]; then
+        return
+    fi
+
+    sql="USE $DBNAME; ALTER TABLE $table $constraint;
+        SHOW FIELDS FROM $table"
+    operate_db "$sql"
+}
+
+function insert_value() {
+    table=$1
+    variables=$2
+    values=$3
+
+    if [ -z $table -o -z "$values" ]; then
+        return
+    fi
+
+    sql="USE $DBNAME; INSERT INTO $table ($variables) VALUES ($values);
+        SELECT * FROM $table"
+    operate_db "$sql"
+}
+
+function init_tblDepartment_table() {
+    create_table tblDepartment \
+        "DeptID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        DeptName CHAR(10),
+        Desciption CHAR(50),
+        ManagerID INT"
+    insert_value tblDepartment "DeptID, DeptName, Desciption, ManagerID" \
+        "'', '人事部', '管理公司员工各项信息', '1'"
+    insert_value tblDepartment "DeptID, DeptName, Desciption, ManagerID" \
+        "'', '财务部', '管理公司财务', '2'"
+    insert_value tblDepartment "DeptID, DeptName, Desciption, ManagerID" \
+        "'', '行政部', '管理公司行政', '3'"
+    insert_value tblDepartment "DeptID, DeptName, Desciption, ManagerID" \
+        "'', '销售部', '销售公司产品', '4'"
+    insert_value tblDepartment "DeptID, DeptName, Desciption, ManagerID" \
+        "'', '研发部', '研发公司产品', '5'"
+    insert_value tblDepartment "DeptID, DeptName, Desciption, ManagerID" \
+        "'', '信息部', '处理公司公关问题', '6'"
+}
+
+init_tblDepartment_table
+
+#function init_tblEmployeeLevel_table() {
+#    create_table tblEmployeeLevel \
+#        "EmployeeLevel INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+#        Description VARCHAR(16)"
+#    insert_value tblEmployeeLevel "EmployeeLevel, Description" \
+#        "'', '高级'"
+#    insert_value tblEmployeeLevel "EmployeeLevel, Description" \
+#        "'', '中级'"
+#    insert_value tblEmployeeLevel "EmployeeLevel, Description" \
+#        "'', '初级'"
+#}
+#init_tblEmployeeLevel_table
+
+function init_tblEmployee_table() {
+    create_table tblEmployee \
+        "EmployeeID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        Name VARCHAR(50) NOT NULL UNIQUE,
+        LoginName VARCHAR(20) NOT NULL UNIQUE,
+        Password VARCHAR(20),
+        Email VARCHAR(50) NOT NULL,
+        DeptID INT,
+        BasicSalary INT,
+        Title VARCHAR(50),
+        Telephone VARCHAR(50),
+        OnboardDate DATETIME NOT NULL,
+        SelfIntro VARCHAR(200),
+        VacationRemain INT,
+        EmployeeLevel INT,
+        PhotoImage BLOB,
+        FOREIGN KEY (DeptID) 
+        REFERENCES tblDepartment (DeptID),
+        check(LoginName <> Name and len(ltrim(LoginName)) <> 0)"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'曹操','admin','1234567','hangwang@bluehill.com',1,6000,'President&CEO','8888','2002-07-15','Enjoy Everyday！', 43,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'刘备','gwshangsdf','1234567','gwshang@bluehill.com',2,2000,'FinanceManager','85111111','2002-05-22',NULL, 87,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'诸葛亮','tchen','1234567','tchen@bluehill.com',3,3000,'Accountant','8533','2003-01-27',NULL, 77,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙权','ychen','1234567','ychen@bluehill.com',4,1000,'Accountant','8515','2002-07-10',NULL, 477,1,NULL" 
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'张飞','yqi','1234567','yqi@bluehill.com',5,1000,'啊啊啊','8517','2002-08-26',NULL,87,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'赵子龙','jcao','1234567','jcao@bluehill.com',6,1000,'Receptionist','8505','2002-10-08',NULL, 87,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'黄忠','lsa','1234567','lsa@bluehill.com',6,1500,'HR Assistant','8518','2002-12-02',NULL,87,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'鲁肃','mchen','1234567','mchen@bluehill.com',5,1000,'Accountant','8547 ','2003-05-06',NULL, 80,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'小乔','tyu','1234567','tyu@bluehill.com',1,500,'Senior CoursewareDeveloper','8478','2003-05-08',NULL, 87,NULL,NULL" 
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙夫人','jhe','1234567','jhe@bluehill.com',2,500,'Senior CoursewareDeveloper','8456','2003-06-02',NULL, 43,NULL,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'姜维','qjiang','1234567','qjiang@bluehill.com',3,500,'LocalizationManager','8961','2003-04-17',NULL, 43,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'周瑜','22tzhang','1234567','tzhang@bluehill.com',4,1233,'Director ','8900','2003-05-16', NULL, 43,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'夏侯渊','cwu','1234567','cwu@bluehill.com',5,4000,'HR Manager','8516','2002-06-01','gfh', 82,1,NULL"
+
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙策','cgong','1234567','cgong@bluehill.com',6,2000,'HR Assistant','8860','2003-10-27', NULL, 43,NULL,NULL"                                                                   
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙皓','sli','1234567','sli@bluehill.com',1,3000,'Manager','8862','2003-10-27',NULL,43,NULL,NULL"                                                                               
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'司马昭','mzhang','1234567','mzhang@bluehill.com',2,1000,'Employee','1111111123','2003-10-27',NULL, 43,NULL,NULL"                                                                         
+        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'司马师','jwang','1234567','jwang@bluehill.com',3,1500,'Employee','8865','2003-10-27', NULL, 43,NULL,NULL"
+        #add tblDepartment foreign key constraint
+        add_table_constraint tblDepartment "add foreign key(ManagerID) references tblEmployee(EmployeeID)"
+}
+
+init_tblEmployee_table
+
+function init_tblSalary_table() {
+    create_table tblSalary \
+        "SalaryID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        EmployeeID INT NOT NULL,
+        SalaryTime DATETIME NOT NULL,
+        BasicSalary INT check(BasicSalary >= 0),
+        OvertimeSalary INT check(OvertimeSalary >= 0), 
+        AbsenceSalary INT check(AbsenceSalary <= 0),
+        OtherSalary INT check (OtherSalary >= 0),
+        FOREIGN KEY (EmployeeID)
+        REFERENCES tblEmployee (EmployeeID)"
+        insert_value tblSalary "EmployeeID,SalaryTime,BasicSalary,OvertimeSalary,AbsenceSalary,OtherSalary" \
+            "1,'2007-07-31',10000,2000,-100,100"
+
+        insert_value tblSalary "EmployeeID,SalaryTime,BasicSalary,OvertimeSalary,AbsenceSalary,OtherSalary" \
+            "2,'2007-08-31',10000,4000 ,-200,100"
+
+        insert_value tblSalary "EmployeeID,SalaryTime,BasicSalary,OvertimeSalary,AbsenceSalary,OtherSalary" \
+            "3,'2007-07-31',4000,2000,-300,200"
+
+        insert_value tblSalary "EmployeeID,SalaryTime,BasicSalary,OvertimeSalary,AbsenceSalary,OtherSalary" \
+            "4,'2007-07-31',5000,2000,-400,220"
+
+        insert_value tblSalary "EmployeeID,SalaryTime,BasicSalary,OvertimeSalary,AbsenceSalary,OtherSalary" \
+            "5,'2007-07-31',6000,2000,-500,330"
+
+        insert_value tblSalary "EmployeeID,SalaryTime,BasicSalary,OvertimeSalary,AbsenceSalary,OtherSalary" \
+            "6,'2007-07-31',7000,2000,-600,330"
+}
+
+init_tblSalary_table
+
+function init_tblAttendance_table() {
+    create_table tblAttendance \
+        "AttendID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        EmployeeID INT NOT NULL,
+        BreachTime DATETIME,
+        RecorderID INT,
+        Type VARCHAR(4) NOT NULL,
+        AskReview TINYINT,
+        Date DATETIME NOT NULL,
+        FOREIGN KEY (EmployeeID)
+        REFERENCES tblEmployee (EmployeeID),
+        FOREIGN KEY (RecorderID)
+        REFERENCES tblEmployee (EmployeeID),
+        check(RecorderID <> EmployeeID and Type in('缺勤', '迟到', '早退'))"
+        
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "4,'2007-9-18',1,'迟到','1','2007-09-18'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "4,'2007-09-16',2,'早退','1','2007-09-16' "
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "3,'2007-09-18',5,'缺勤', 1,'2007-09-18'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "4,'2007-09-13',6,'缺勤', 1,'2007-09-13'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "1,'2007-09-13',10,'缺勤', 1,'2007-09-15'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "2,'2007-09-15',3,'迟到','0','2007-09-15'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "3,'2007-09-13',4, '缺勤', 1,'2007-09-18'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "4,'2007-09-12', 1,'迟到','1','2007-09-12'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "5,'2007-09-14', 1,'早退','1','2007-09-14'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "6,'2007-09-11', 1 ,'缺勤',  '0' ,'2007-09-11' "
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "2,'2007-09-13' ,1,'早退','0','2007-09-13' "
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "2,'2007-09-15', 1,'早退', '1','2007-09-15'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "3,'2007-09-15', 1,'迟到', '0','2007-09-15'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "5,'2007-09-11', 1,'缺勤', '1','2007-09-11'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "7,'2007-09-17',1,'缺勤','0', '2007-09-17'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "8,'2007-09-17',1,'迟到','0','2007-09-17' "
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "9,'2007-09-17',1, '早退','0','2007-09-29'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "10,'2007-09-17',1,'迟到','0','2007-09-29'"
+        insert_value tblAttendance "EmployeeID, BreachTime, RecorderID, Type,AskReview,Date" \
+        "11,'2007-09-17',1,'早退','0','2007-09-29'"
+}
+
+init_tblAttendance_table
+
+
+function init_tblLeave_table() {
+    create_table tblLeave \
+        "LeaveID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        EmployeeID INT NOT NULL,
+        SubmitTime DATETIME NOT NULL,
+        StartTime DATETIME NOT NULL,
+        EndTime DATETIME NOT NULL,
+        Reason VARCHAR(100),
+        TypeID INT,
+        Hours FLOAT NOT NULL,
+        Status VARCHAR(20),
+        ApproverID INT,
+        DenyReason VARCHAR(100),
+        FOREIGN KEY (EmployeeID)
+        REFERENCES tblEmployee (EmployeeID),
+        FOREIGN KEY (ApproverID)
+        REFERENCES tblEmployee (EmployeeID),
+        check(StartTime <= EndTime and Status in ('以批准', '已决定', 
+        '已提交', 已取消))"
+
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "4,'2007-09-15','2007-09-15','2007-09-16','有事', NULL,8,'已取消',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "3,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,16,'已否决',2,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "2,'2007-09-15','2007-08-16','2007-08-18','有事', NULL,24,'已批准',3,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "1,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已提交',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "5,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已否决',2,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "6,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已批准',1,NULL"
+}
+
+init_tblLeave_table
+
+function init_tblOverTimeType_table() {
+    create_table tblOverTimeType \
+        "Type TINYINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        Description VARCHAR(10) NOT NULL,
+        check(Description in ('折算成年假', '这算成津贴'))"
+    insert_value tblOverTimeType "Type, Description" \
+        "1, '折算成年假'"
+    insert_value tblOverTimeType "Type, Description" \
+        "2, '折算成津贴'"
+}
+
+init_tblOverTimeType_table
+
+
+function init_tblOverTime_table() {
+   create_table tblOverTime \
+       "OvertimeID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+       EmployeeID INT NOT NULL,
+       ApproverID INT,
+       SubmitTime DATETIME NOT NULL,
+       StartTime DATETIME NOT NULL,
+       EndTime DATETIME NOT NULL,
+       Reason VARCHAR(100) NOT NULL,
+       Status VARCHAR(10) NOT NULL,
+       Type TINYINT,
+       Denyreason varchar(100),
+       Hours INT,
+       check(StartTime<=EndTime and Status in ('以批准', '已否决', 
+       '已提交', '已取消')),
+        FOREIGN KEY (Type)
+        REFERENCES tblOverTimeType (Type),
+        FOREIGN KEY (EmployeeID)
+        REFERENCES tblEmployee (EmployeeID),
+        FOREIGN KEY (ApproverID)
+        REFERENCES tblEmployee (EmployeeID)"
+
+        insert_value tblOverTime "EmployeeID,ApproverID,SubmitTime,StartTime,EndTime,Reason,Status,Type,DenyReason,Hours" \
+            "2,1,'2007-09-16','2007-09-19','2007-09-19','有事','已否决',1,'该时间段不能加班',null"
+
+        insert_value tblOverTime "EmployeeID,ApproverID,SubmitTime,StartTime,EndTime,Reason,Status,Type,DenyReason,Hours" \
+            "3,1,'2007-09-16','2007-09-19','2007-09-19','评比','已批准',1,'评比',4"   
+
+        insert_value tblOverTime "EmployeeID,ApproverID,SubmitTime,StartTime,EndTime,Reason,Status,Type,DenyReason,Hours" \
+            "4,1,'2007-09-16','2007-09-19','2007-09-19','有事','已否决',1,'要休息',null"
+
+        insert_value tblOverTime "EmployeeID,ApproverID,SubmitTime,StartTime,EndTime,Reason,Status,Type,DenyReason,Hours" \
+            "5,1,'2007-09-16','2007-09-19','2007-09-19','有事','已否决',1,'放假了',null" 
+
+        insert_value tblOverTime "EmployeeID,ApproverID,SubmitTime,StartTime,EndTime,Reason,Status,Type,DenyReason,Hours" \
+            "6,1,'2007-09-16','2007-09-19','2007-09-19','有事','已批准',1,'写报告',8"
+}
+
+init_tblOverTime_table
+
+function init_tblPerformance_table() {
+    create_table tblPerformance \
+        "PerformID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        EmployeeID INT NOT NULL,
+        ReviewerID INT,
+        SubmitTime DATETIME NOT NULL,
+        PerformYear INT NOT NULL,
+        PerformSeason TINYINT NOT NULL,
+        Status TINYINT check(Status=0 or Status=1),
+        LastEditTime DATETIME,
+        SelfScore TINYINT,
+        ReviewScore TINYINT,
+        SelfComment VARCHAR(200) DEFAULT NULL,
+        ReviewComment VARCHAR(200) DEFAULT NULL,
+        FOREIGN KEY (EmployeeID)
+        REFERENCES tblEmployee (EmployeeID),
+        FOREIGN KEY (ReviewerID)
+        REFERENCES tblEmployee (EmployeeID)"
+        insert_value tblPerformance "EmployeeID,ReviewerID,SubmitTime,PerformYear,PerformSeason,Status,LastEditTime,SelfScore,ReviewScore,SelfComment,ReviewComment" \
+            "2,1,'2006-09-25','2006',3,0,'2007-09-28',NULL,NULL,Null,Null"    
+
+        insert_value tblPerformance "EmployeeID,ReviewerID,SubmitTime,PerformYear,PerformSeason,Status,LastEditTime,SelfScore,ReviewScore,SelfComment,ReviewComment"  \
+            "3,1,'2007-01-25','2007',1,0,'2007-09-28',NULL,NULL,Null,Null"    
+
+        insert_value tblPerformance "EmployeeID,ReviewerID,SubmitTime,PerformYear,PerformSeason,Status,LastEditTime,SelfScore,ReviewScore,SelfComment,ReviewComment"  \
+            "4,1,'2004-06-25','2004',2,0,'2004-06-28',NULL,NULL,Null,Null"    
+
+        insert_value tblPerformance "EmployeeID,ReviewerID,SubmitTime,PerformYear,PerformSeason,Status,LastEditTime,SelfScore,ReviewScore,SelfComment,ReviewComment" \
+            "5,1,'2007-09-25','2007',3,0,'2007-09-28',NULL,NULL,Null,Null"    
+
+        insert_value tblPerformance "EmployeeID,ReviewerID,SubmitTime,PerformYear,PerformSeason,Status,LastEditTime,SelfScore,ReviewScore,SelfComment,ReviewComment" \
+            "6,1,'2007-09-25','2006',3,0,'2007-09-28',NULL,NULL,Null,Null"
+}
+
+init_tblPerformance_table
+
+function init_tblConfig_table() {
+    create_table tblConfig \
+        "ConfigID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        Type CHAR(10),
+        Name CHAR(50) NOT NULL,
+        Data CHAR(50)"
+    insert_value tblConfig "Type, Name, Data" \
+        "'Policy', 'NormalLeaveDays', '5'"
+}
+
+init_tblConfig_table
+
+
+function init_tblSystemEvent_table() {
+    create_table tblSystemEvent \
+        "EventID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        EventTime DATETIME NOT NULL,
+        EventMessage VARCHAR(100) NOT NULL"
+
+}
+
+init_tblSystemEvent_table
+
+function init_tblPerformStatus_table() {
+    create_table tblPerformStatus \
+        "Type TINYINT NOT NULL,
+        Name VARCHAR(10) NOT NULL"
+}
+
+init_tblPerformStatus_table
+
+
+function init_tblHoliday_table() {
+    create_table tblHoliday \
+        "HolidayID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        HolidayDate DATETIME NOT NULL,
+        HolidayName VARCHAR(50) NOT NULL,
+        IsNationalHoliday BOOLEAN NOT NULL"
+
+        insert_value tblHoliday "HolidayDate,HolidayName,IsNationalHoliday" \
+            "'2007-10-01','国庆节',1"
+
+        insert_value tblHoliday "HolidayDate,HolidayName,IsNationalHoliday" \
+            "'2007-5-1','五一劳动节',0"
+
+        insert_value tblHoliday "HolidayDate,HolidayName,IsNationalHoliday" \
+            "'2007-10-03','建军节',0"
+
+        insert_value tblHoliday "HolidayDate,HolidayName,IsNationalHoliday" \
+            "'2007-05-04','青年节',0"
+
+        insert_value tblHoliday "HolidayDate,HolidayName,IsNationalHoliday" \
+            "'2007-06-01','儿童节',1"
+
+        insert_value tblHoliday "HolidayDate,HolidayName,IsNationalHoliday" \
+            "'2007-4-5','清明节',1"
+}
+
+init_tblHoliday_table
+
+function init_tblPerformItem_table() {
+    create_table tblPerformItem \
+        "PerformItemID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        PerformID INT NOT NULL,
+        ObjectContent VARCHAR(100) NOT NULL,
+        SelfScore TINYINT,
+        ReviewScore TINYINT,
+        FOREIGN KEY (PerformID)
+        REFERENCES tblPerformance(PerformID)"
+
+        insert_value tblPerformItem "PerformID,ObjectContent,SelfScore, ReviewScore" \
+            "1,'Learn XML',1,1"
+
+        insert_value tblPerformItem "PerformID,ObjectContent,SelfScore, ReviewScore" \
+            "2,'Learn ADO.NET',2,2"
+
+        insert_value tblPerformItem "PerformID,ObjectContent,SelfScore, ReviewScore" \
+            "3,'learn Com+',4,2"
+
+        insert_value tblPerformItem "PerformID,ObjectContent,SelfScore, ReviewScore" \
+            "4,'learn C# ',2,2"
+
+        insert_value tblPerformItem "PerformID,ObjectContent,SelfScore, ReviewScore" \
+            "4,'learn Java',2,1"
+}
+
+init_tblPerformItem_table
+
+
+# add tblDepartment constriant foreign key
+#function add_foreign_key() {
+#        add_table_constraint tblEmployee \
+#            "add  foreign key(DeptID) references tblDepartment(DeptID)"
+#
+#        add_table_constraint tblDepartment \
+#            "add foreign key(ManagerID) References  tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblSalary \
+#            "add foreign key(EmployeeID) References  tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblAttendance \
+#            "add foreign key(EmployeeID) References  tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblAttendance \
+#            "add foreign key( RecorderID) References  tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblLeave \
+#            "add foreign key(EmployeeID) References  tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblLeave \
+#            "add foreign key(ApproverID) References  tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblOverTime \
+#            "add foreign key(Type) references tblOverTimeType(Type)"
+#
+#        add_table_constraint tblOverTime \
+#            "add foreign key(EmployeeID) references tblEmployee(EmployeeID)"
+#        
+#        add_table_constraint tblOverTime \
+#            "add foreign key(ApproverID) references tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblPerformance \
+#            "add foreign key(EmployeeID) references tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblPerformance \
+#            "add foreign key(ReviewerID) references tblEmployee(EmployeeID)"
+#
+#        add_table_constraint tblPerformItem \
+#            "add foreign key(PerformID ) References tblPerformance(PerformID)"
+#    }
+#add_foreign_key

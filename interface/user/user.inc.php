@@ -33,6 +33,8 @@ class InterfaceUser {
         $username = $params['username'];
 
         if (0 == $frommobile) {
+            if ($result == InterfaceError::ERR_OK)
+            {
             $url = $rootdir."/modules/usercenter/minecenter.php?username="
                 .$username."&login_status=".true;
             $result = "<script>url=\"$url\";".
@@ -40,6 +42,17 @@ class InterfaceUser {
                 "</script>";
 
             return $result;
+            } else {
+                $js = "<script language='javascript' type = 'text/javascript'
+                    >alert('用户名或密码错误！');</script>";
+                $url = $rootdir."/info_search.php";
+                $result = $js."<script>url=\"$url\";".
+                    "window.location.href=url;".
+                    "</script>";
+
+                return $result;
+                
+            }
         } else {
             $error = new InterfaceError();
             return $error->errorAction(
@@ -114,10 +127,10 @@ class InterfaceUser {
             "introduction"=>$params['introduction']); 
         $dbuser = new WrapperDBUser();
         $ret = $dbuser->updateuserdata($userdata);
-        if (!empty($ret))
+        if ($ret == InterfaceError::ERR_OK)
         {
             $js = "<script language='javascript' type = 'text/javascript'
-                >alert('修改完成！');</script>";
+                >alert('修改成功！');</script>";
             $url = $rootdir."/modules/usercenter/minecenter.php?username="
                 .$username."&login_status=".true;
             $result = $js."<script>url=\"$url\";".
@@ -125,6 +138,17 @@ class InterfaceUser {
                 "</script>";
 
             return $result;
+        } else {
+            $js = "<script language='javascript' type = 'text/javascript'
+                >alert('修改失败');</script>";
+            $url = $rootdir."/modules/usercenter/minecenter.php?username="
+                .$username."&login_status=".true;
+            $result = $js."<script>url=\"$url\";".
+                "window.location.href=url;".
+                "</script>";
+
+            return $result;
+
         }
         //$error = new InterfaceError();
         //return $error->errorAction($ret, null);

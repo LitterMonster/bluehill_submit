@@ -82,6 +82,8 @@ class DBHTWUser extends DBHelpTheWorld {
         $ret = $this->runSQL($sql);
         if (0 == sizeof($ret)) {
             return InterfaceError::ERR_INVALIDPARAMS;
+        } else {
+            return InterfaceError::ERR_OK;
         }
 
         //$this->updatelastaccess($username);
@@ -396,14 +398,18 @@ class DBHTWUser extends DBHelpTheWorld {
             $sql = "update tblEmployee set SelfIntro = '".$data['introduction'].
                 "' where EmployeeID = $employeeID ";
             $ret = $this->runSQL($sql);
+
+            return InterfaceError::ERR_OK;
         }
         else
         {
             $sql = "update tblEmployee set Password = '".$data['password'].
                 "' where EmployeeID = $employeeID ";
             $ret = $this->runSQL($sql);
+
+            return InterfaceError::ERR_OK;
         }
-        return InterfaceError::ERR_OK;
+        return InterfaceError::INVALIDPARAMS;
        /* 
         $baseinfo = $this->getbaseinfo($data['username']);
         if (empty($baseinfo)) {

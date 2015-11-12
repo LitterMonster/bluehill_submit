@@ -370,6 +370,28 @@ function init_tblLeave_table() {
             "5,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已否决',2,NULL"
         insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
             "6,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已批准',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "7,'2007-09-15','2007-09-15','2007-09-16','有事', NULL,8,'已取消',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "8,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,16,'已否决',2,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "9,'2007-09-15','2007-08-16','2007-08-18','有事', NULL,24,'已批准',3,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "10,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已提交',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "11,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已否决',2,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "12,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已批准',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "13,'2007-09-15','2007-09-15','2007-09-16','有事', NULL,8,'已取消',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "14,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,16,'已否决',2,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "15,'2007-09-15','2007-08-16','2007-08-18','有事', NULL,24,'已批准',3,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "16,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已提交',1,NULL"
+        insert_value tblLeave "EmployeeID,SubmitTime,StartTime,EndTime,Reason,TypeID,Hours,Status,ApproverID,DenyReason" \
+            "17,'2007-09-15','2007-09-16','2007-09-17','有事', NULL,8,'已否决',2,NULL"
 }
 
 init_tblLeave_table

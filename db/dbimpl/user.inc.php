@@ -100,14 +100,14 @@ class DBHTWUser extends DBHelpTheWorld {
     {
         $employeeID = $this->getuserinfo($username)['EmployeeID'];
 
-        $sql = "SELECT * FROM tblLeave WHERE EmployeeID = $employeeID";
+        $sql = "SELECT * FROM tblLeave WHERE EmployeeID = $employeeID LIMIT 1";
         $ret = $this->runSQL($sql);
 
         if (0 == sizeof($ret))
         {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
-        return $ret;
+        return $ret[0];
     }
 
     public function getremainhours($loginname)
@@ -186,6 +186,40 @@ class DBHTWUser extends DBHelpTheWorld {
         }
 
         return InterfaceError::ERR_INVALIDPARAMS;
+    }
+
+    /**
+     * Brief: get staff under the manager
+     * Return:
+     *     An array includes the staff
+     */ 
+    public function getmanagerstaff($loginname)
+    {
+        $deptid = $this->getuserinfo($loginname)['DeptID'];
+
+        $sql = "SELECT Name FROM tblEmployee WHERE DeptID = $deptid";
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret;
+    }
+
+    public function getloginname($username)
+    {
+        $sql= "SELECT LoginName FROM tblEmployee
+            WHERE Name = '".$username."'LIMIT 1 ";
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret[0]['LoginName'];
     }
 
     private function reorganizeSecureInfo($secureinfo) {
@@ -386,6 +420,24 @@ class DBHTWUser extends DBHelpTheWorld {
 
         $managername = $ret[0];
         return $managername;
+    }
+
+    public function getstaffleaveinfo($loginname)
+    {
+        $deptid = $this->getuserinfo($loginname)['DeptID'];
+
+        $sql = "SELECT c.Name 'ApproverName', a.* FROM tblLeave a,
+            tblEmployee b, tblEmployee c WHERE a.EmployeeID = 
+            b.EmployeeID AND b.LoginName = '".$loginname."' 
+            AND c.EmployeeID = a.ApproverID LIMIT 1";
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret[0];
     }
 
     public function getsecureinfo($requestuser, $requesteduser) {

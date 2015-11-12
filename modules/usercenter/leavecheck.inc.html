@@ -1,0 +1,82 @@
+<html>
+  <?php
+  if (!empty($_COOKIE['username'])) {
+  $username = $_COOKIE['username'];
+  $dbuser = new WrapperDBUser();
+  $managerstaff = $dbuser->getmanagerstaff($username);
+  }
+  ?>
+  <hr/>
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+      <th><h3>部门员工及请假概览</h3></td>
+      <tr>
+        <td>员工姓名</td>
+        <td>年假总数</td>
+        <td>已使用小时数</td>
+        <td>可用小时数</td>
+      </tr>
+        <?php
+         for($i = 0; $i < sizeof($managerstaff); $i++)
+         {
+             $username = $managerstaff[$i]['Name'];
+             $loginname = $dbuser->getloginname($username);
+             $remainhours = $dbuser->getremainhours($loginname);
+             echo "<tr>";
+             echo "<td>".$username."</td>";
+             echo "<td>80</td>";
+             echo "<td>".(80 - $remainhours)."</td>";
+             echo "<td>".$remainhours."</td>";
+             echo "</tr>";
+         }
+         ?>
+    </tbody>
+  </table>
+  <hr/>
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+      <th><h3>员工请假详情</h3></td>
+      <tr>
+        <td>请假编号</td>
+        <td>请假者姓名</td>
+        <td>审核者姓名</td>
+        <td>提交时间</td>
+        <td>开始时间</td>
+        <td>结束时间</td>
+        <td>原因</td>
+        <td>时长</td>
+        <td>状态</td>
+      </tr>
+        <?php
+         for($i = 0; $i < sizeof($managerstaff); $i++)
+         {
+             $username = $managerstaff[$i]['Name'];
+             $loginname = $dbuser->getloginname($username);
+             $leaveinfo = $dbuser->getstaffleaveinfo($loginname);
+             echo "<tr>";
+             echo "<td>".$leaveinfo['LeaveID']."</td>";
+             echo "<td>".$username."</td>";
+             echo "<td>".$leaveinfo['ApproverName']."</td>";
+             echo "<td>".$leaveinfo['SubmitTime']."</td>";
+             echo "<td>".$leaveinfo['StartTime']."</td>";
+             echo "<td>".$leaveinfo['EndTime']."</td>";
+             echo "<td>".$leaveinfo['Reason']."</td>";
+             echo "<td>".$leaveinfo['Hours']."</td>";
+             echo "<td>".$leaveinfo['Status']."</td>";
+             echo "</tr>";
+         }
+         ?>
+    </tbody>
+  </table>
+
+
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

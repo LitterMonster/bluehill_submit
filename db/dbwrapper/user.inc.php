@@ -100,6 +100,58 @@ class WrapperDBUser {
 
     }
 
+    /**
+     * Brife: get the staff under the control of manager
+     * Return:
+     *     The staff array
+     */ 
+    public function getmanagerstaff($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getmanagerstaff($loginname);
+        return $ret;
+    }
+
+    /**
+     * Brife: get the employee's leave record
+     * Return:
+     *     An array contains the leave record
+     */ 
+    public function getstaffleaveinfo($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getstaffleaveinfo($loginname);
+        return $ret;
+    }
+
+    /**
+     * Brife: Convert from username to loginname
+     * Return:
+     *     loginname
+     */
+
+    public function getloginname($username)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($username)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getloginname($username);
+        return $ret;
+    }
+
     public function getsecureinfo($requestuser, $requesteduser) {
         $dbhtwuser = new DBHTWUser();
 

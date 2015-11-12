@@ -1,11 +1,5 @@
 <html>
-<?php
-  if (!empty($_COOKIE['username'])) {
-    $username = $_COOKIE['username'];
-    $dbuser = new WrapperDBUser();
-    $info = $dbuser->getuserinfo($username, $username);
-  }
-?>
+
 <form method="post" action="<?=$rootdir?>/bootstrap.php/user/updatebaseinfo?frommobile=0&username=<?=$_COOKIE['username']?>">
     <table class="userdata_base_label">
       <tbody>

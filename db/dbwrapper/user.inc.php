@@ -74,6 +74,19 @@ class WrapperDBUser {
         return $ret;
     }
 
+    public function ismanager($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->ismanager($loginname);
+        return $ret;
+
+    }
+
     public function getsecureinfo($requestuser, $requesteduser) {
         $dbhtwuser = new DBHTWUser();
 

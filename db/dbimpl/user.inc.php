@@ -91,6 +91,11 @@ class DBHTWUser extends DBHelpTheWorld {
         //return $ret;
     }
 
+    /**
+     * Return:
+     *     all  tblLeave information when username is not null
+     */
+
     public function getleaveinfo($username)
     {
         $employeeID = $this->getuserinfo($username)['EmployeeID'];
@@ -105,11 +110,16 @@ class DBHTWUser extends DBHelpTheWorld {
         return $ret;
     }
 
+    /**
+     * Brife: get used hours in the Year Holiday
+     * Return :
+     *        the hours;
+     */ 
     public function getusedhours($username)
     {
         if (empty($username))
         {
-            return InterfaceError::ERR_OK;
+            return InterfaceError::ERR_INVALIDPARAMS;
         }
 
         $leaveinfo = $this->getleaveinfo($username);
@@ -125,6 +135,51 @@ class DBHTWUser extends DBHelpTheWorld {
         }
 
         return $counthours;
+    }
+
+    /**
+     * Brife: get manager info 
+     * Return:
+     *      DeptName => ManagerName, it includes an array.
+     */
+    public function getmanagerinfo()
+    {
+        $sql = "SELECT b.DeptName, a.Name FROM tblEmployee a, tblDepartment b
+            WHERE a.EmployeeID = b.ManagerID AND a.DeptID = b.DeptID";
+        $ret = $this->runSQL($sql);
+        if (empty($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $managerinfo = null;
+
+        for($i = 0; $i < sizeof($ret); $i++)
+        {
+            $managerinfo[$ret[$i]['DeptName']] = $ret[$i]['Name'];
+        }
+
+        return $managerinfo;
+    }
+
+    /**
+     * Brife:Judge the loginname is whether the manager
+     * Return:
+     *     true: InterfaceError::ERR_OK
+     *     false: InterfaceError::ERR_INVALIDPARAMS
+     */
+    public function ismanager($loginname)
+    {
+        $managerinfo = $this->getmanagerinfo();
+
+        $username = $this->getuserinfo($loginname)['Name'];
+        foreach($managerinfo as $deptname => $managername)
+        {
+            if ($username == $managername)
+                return InterfaceError::ERR_OK;
+        }
+
+        return InterfaceError::ERR_INVALIDPARAMS;
     }
 
     private function reorganizeSecureInfo($secureinfo) {
@@ -562,8 +617,9 @@ class DBHTWUser extends DBHelpTheWorld {
         } else {
             return true;
         }
-    }    
+    } 
 
+    /*
     public function updatelastaccess($username) {
         if (empty($username)) {
             return InterfaceError::ERR_INVALIDPARAMS;
@@ -578,5 +634,6 @@ class DBHTWUser extends DBHelpTheWorld {
         $ret = $this->runSQL($sql);
         return array("lastaccess"=>$accesstime);
     }
+    */
 }
 ?>

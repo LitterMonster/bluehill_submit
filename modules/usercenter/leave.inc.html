@@ -1,8 +1,17 @@
+<?php
+if (!empty($_COOKIE['username'])) {
+$username = $_COOKIE['username'];
+$dbuser = new WrapperDBUser();
+$info = $dbuser->ismanager($username);
+}
+?>
 <html>
   <div class="tabs-vertical">
     <ul class="tab-vertical-links">
       <li class="active"><a href="#leaveapply">请假申请</a></li>
-      <li><a href="#leavecheck">请假审核</a></li>
+      <?php if ($info == InterfaceError::ERR_OK) {?>
+        <li><a href="#leavecheck">请假审核</a></li>
+      <?php }?>
     </ul>
 
     <ul class="tab-vertical-content">
@@ -17,18 +26,18 @@
     </ul>
   </div>
   <script>
-    jQuery(document).ready(function() {
-      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
-        var currentAttrValue = jQuery(this).attr('href');
+jQuery(document).ready(function() {
+  jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+    var currentAttrValue = jQuery(this).attr('href');
 
-        // Show/Hide Tabs
-        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+    // Show/Hide Tabs
+    jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
 
-        // Change/remove current tab to active
-        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+    // Change/remove current tab to active
+    jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
 
-        e.preventDefault();
-      });
-    });
+    e.preventDefault();
+  });
+});
   </script>
 </html>

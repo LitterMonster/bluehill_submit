@@ -59,18 +59,31 @@ class WrapperDBUser {
 
     /*
      * Input: Employee's name
-     * Output:Employee's used hours of the YearHoliday !
+     * Output:Employee's used hours in the tblLeave, It is not the whole
+     * used hours in the YearHoliday !
      * Date:2015-11-12 Author:Zhangtao
      */
-    public function getusedhours($username)
+    public function getusedhours($loginname)
     {
         $dbhtwuser = new DBHTWUser();
 
-        if (empty($username)) {
+        if (empty($loginname)) {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
 
-        $ret = $dbhtwuser->getusedhours($username);
+        $ret = $dbhtwuser->getusedhours($loginname);
+        return $ret;
+    }
+
+    public function getremainhours($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getremainhours($loginname);
         return $ret;
     }
 

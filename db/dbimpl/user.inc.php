@@ -110,8 +110,14 @@ class DBHTWUser extends DBHelpTheWorld {
         return $ret;
     }
 
+    public function getremainhours($loginname)
+    {
+        $vacationremain = $this->getuserinfo($loginname)['VacationRemain'];
+        return $vacationremain;
+    }
+
     /**
-     * Brife: get used hours in the Year Holiday
+     * Brife: get used hours in the tblLeave 
      * Return :
      *        the hours;
      */ 

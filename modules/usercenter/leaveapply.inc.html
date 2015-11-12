@@ -3,13 +3,13 @@
   if (!empty($_COOKIE['username'])) {
   $username = $_COOKIE['username'];
   $dbuser = new WrapperDBUser();
-  $usedhours = $dbuser->getusedhours($username);
+  $remainhours = $dbuser->getremainhours($username);
   }
   ?>
   <table class="userdata_base_label" border = "1">
     <tbody>
       <tr><td>总小时数</td><td>已用小时数</td><td>剩余小时数</td></tr>
-      <tr><td>80</td><td><?=$usedhours?></td><td><?=(80-$usedhours)?></td></tr>
+      <tr><td>80</td><td><?=(80 - $remainhours)?></td><td><?=$remainhours?></td></tr>
     </tbody>
   </table>
 

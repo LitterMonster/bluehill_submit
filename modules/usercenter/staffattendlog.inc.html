@@ -1,0 +1,61 @@
+<html>
+  <?php
+  if (!empty($_COOKIE['username'])) {
+  $username = $_COOKIE['username'];
+  $dbuser = new WrapperDBUser();
+  $managerstaff = $dbuser->getmanagerstaff($username);
+  }
+  ?>
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+      <th><h3>员工考勤详情</h3></td>
+      <tr>
+        <td>考勤编号</td>
+        <td>员工姓名</td>
+        <td>记录者姓名</td>
+        <td>到达时间</td>
+        <td>考勤时间</td>
+        <td>请求重新审核</td>
+        <td>日期</td>
+      </tr>
+        <?php
+         $state = false;
+         for($i = 0; $i < sizeof($managerstaff); $i++)
+         {
+             $username = $managerstaff[$i]['Name'];
+             $loginname = $dbuser->getloginname($username);
+             $attendinfo = $dbuser->getattendinfo($loginname);
+             if ($attendinfo != InterfaceError::ERR_INVALIDPARAMS)
+             {
+               for ($j = 0; $j < sizeof($attendinfo); $j++)
+               {
+               $state = true;
+               echo "<tr>";
+               echo "<td>".$attendinfo[$j]['AttendID']."</td>";
+               echo "<td>".$username."</td>";
+               echo "<td>".$attendinfo[$j]['Name']."</td>";
+               echo "<td>".$attendinfo[$j]['BreachTime']."</td>";
+               echo "<td>".$attendinfo[$j]['Type']."</td>";
+               echo "<td>".(($attendinfo[$j]['AskReview']==1)?'是':'否')."</td>";
+               echo "<td>".$attendinfo[$j]['Date']."</td>";
+               echo "</tr>";
+               }
+             }
+          }
+          if ($state == false)
+          echo "<h2>无员工考勤记录！</h2>";
+         ?>
+    </tbody>
+  </table>
+
+
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

@@ -152,6 +152,31 @@ class WrapperDBUser {
         return $ret;
     }
 
+    public function getusername($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getusername($loginname);
+        return $ret;
+    }
+
+    public function getattendinfo($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getattendinfo($loginname);
+        return $ret;
+
+    }
+
     public function getsecureinfo($requestuser, $requesteduser) {
         $dbhtwuser = new DBHTWUser();
 

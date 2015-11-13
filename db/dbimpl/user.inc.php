@@ -196,8 +196,10 @@ class DBHTWUser extends DBHelpTheWorld {
     public function getmanagerstaff($loginname)
     {
         $deptid = $this->getuserinfo($loginname)['DeptID'];
+        $username = $this->getusername($loginname);
 
-        $sql = "SELECT Name FROM tblEmployee WHERE DeptID = $deptid";
+        $sql = "SELECT Name FROM tblEmployee WHERE DeptID = $deptid 
+            AND Name != '".$username."' ";
         $ret = $this->runSQL($sql);
 
         if (0 == sizeof($ret))
@@ -210,7 +212,7 @@ class DBHTWUser extends DBHelpTheWorld {
 
     public function getloginname($username)
     {
-        $sql= "SELECT LoginName FROM tblEmployee
+        $sql = "SELECT LoginName FROM tblEmployee
             WHERE Name = '".$username."'LIMIT 1 ";
         $ret = $this->runSQL($sql);
 
@@ -222,6 +224,35 @@ class DBHTWUser extends DBHelpTheWorld {
         return $ret[0]['LoginName'];
     }
 
+    public function getusername($loginname)
+    {
+        $sql = "SELECT Name FROM tblEmployee
+        WHERE LoginName = '".$loginname."' LIMIT 1";
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret[0]['Name'];
+    }
+
+    public function getattendinfo($loginname)
+    {
+        $employeeID = $this->getuserinfo($loginname)['EmployeeID'];
+        $sql = "SELECT c.Name, a.* FROM tblAttendance a, tblEmployee b,
+            tblEmployee c WHERE a.EmployeeID = b.EmployeeID AND
+            a.EmployeeID = $employeeID AND a.RecorderID = c.EmployeeID";
+        $ret = $this->runSQL($sql);
+        
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret; 
+    }
     private function reorganizeSecureInfo($secureinfo) {
         if (empty($secureinfo)) {
             return $secureinfo;

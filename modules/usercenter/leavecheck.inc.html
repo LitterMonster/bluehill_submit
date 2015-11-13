@@ -8,8 +8,11 @@
   ?>
   <hr/>
   <table class="userdata_base_label" border = "1">
-    <tbody>
-      <th><h3>部门员工及请假概览</h3></td>
+    <?php
+         if ($managerstaff != InterfaceError::ERR_INVALIDPARAMS)
+         {
+         ?>
+    <tbody> <th><h3>部门员工及请假概览</h3></td>
       <tr>
         <td>员工姓名</td>
         <td>年假总数</td>
@@ -31,9 +34,18 @@
          }
          ?>
     </tbody>
+    <?php 
+         } else {
+         ?>
+         <h2>无员工请假信息!</h2>
+         <?php } ?>
   </table>
   <hr/>
   <table class="userdata_base_label" border = "1">
+    <?php
+         if ($managerstaff != InterfaceError::ERR_INVALIDPARAMS)
+         {
+         ?>
     <tbody>
       <th><h3>员工请假详情</h3></td>
       <tr>
@@ -67,6 +79,11 @@
          }
          ?>
     </tbody>
+    <?php 
+         } else {
+         ?>
+         <h2>无员工请假信息!</h2>
+         <?php } ?>
   </table>
 
 

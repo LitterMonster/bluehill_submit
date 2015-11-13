@@ -1,0 +1,43 @@
+<?php
+if (!empty($_COOKIE['username'])) {
+$username = $_COOKIE['username'];
+$dbuser = new WrapperDBUser();
+$info = $dbuser->ismanager($username);
+}
+?>
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#attendlog">考勤记录</a></li>
+      <?php if ($info == InterfaceError::ERR_OK) {?>
+        <li><a href="#staffattendlog">下属考勤</a></li>
+      <?php }?>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="attendlog" class="tab active">
+        <?php include('attendlog.inc.html'); ?>
+      </div>
+
+      <div id="staffattendlog" class="tab">
+        <?php include('staffattendlog.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+jQuery(document).ready(function() {
+  jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+    var currentAttrValue = jQuery(this).attr('href');
+
+    // Show/Hide Tabs
+    jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+    // Change/remove current tab to active
+    jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+    e.preventDefault();
+  });
+});
+  </script>
+</html>

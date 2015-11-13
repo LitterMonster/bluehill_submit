@@ -1,0 +1,51 @@
+<html>
+  <?php
+  if (!empty($_COOKIE['username'])) {
+  $username = $_COOKIE['username'];
+  $dbuser = new WrapperDBUser();
+  $attendinfo = $dbuser->getattendinfo($username);
+  }
+  ?>
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+      <tr>
+        <td>考勤编号</td>
+        <td>记录者姓名</td>
+        <td>到达时间</td>
+        <td>考勤类型</td>
+        <td>请求重新审核</td>
+        <td>日期</td>
+      </tr>
+      <?php
+         $state = false;
+         if ($attendinfo != InterfaceError::ERR_INVALIDPARAMS)
+         {
+           for($i = 0; $i < sizeof($attendinfo); $i++)
+           {
+           $state = true;
+           echo "<tr>";
+           echo "<td>".$attendinfo[$i]['AttendID']."</td>";
+           echo "<td>".$attendinfo[$i]['Name']."</td>";
+           echo "<td>".$attendinfo[$i]['BreachTime']."</td>";
+           echo "<td>".$attendinfo[$i]['Type']."</td>";
+           echo "<td>".(($attendinfo[$i]['AskReview']==1)?'是':'否')."</td>";
+           echo "<td>".$attendinfo[$i]['Date']."</td>";
+           echo "</tr>";
+           }
+         }
+         if ($state == false)
+         echo "<h2>无考勤记录!</h2>";
+         ?>
+    </tbody>
+  </table>
+
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

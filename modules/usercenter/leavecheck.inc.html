@@ -6,13 +6,13 @@
   $managerstaff = $dbuser->getmanagerstaff($username);
   }
   ?>
-  <hr/>
   <table class="userdata_base_label" border = "1">
     <?php
          if ($managerstaff != InterfaceError::ERR_INVALIDPARAMS)
          {
-         ?>
-    <tbody> <th><h3>部门员工及请假概览</h3></td>
+         ?> 
+    <h3>部门员工及请假概览</h3>
+    <tbody>
       <tr>
         <td>员工姓名</td>
         <td>年假总数</td>
@@ -46,8 +46,8 @@
          if ($managerstaff != InterfaceError::ERR_INVALIDPARAMS)
          {
          ?>
+    <h3>员工请假详情</h3>
     <tbody>
-      <th><h3>员工请假详情</h3></td>
       <tr>
         <td>请假编号</td>
         <td>请假者姓名</td>

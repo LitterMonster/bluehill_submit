@@ -116,11 +116,12 @@ class DBHTWUser extends DBHelpTheWorld {
         return $vacationremain;
     }
 
-    /**
-     * Brife: get used hours in the tblLeave 
-     * Return :
-     *        the hours;
-     */ 
+    /*
+     * Input: Employee's name
+     * Output:Employee's used hours in the tblLeave, It is not the whole
+     * used hours in the YearHoliday !
+     * Date:2015-11-12 Author:Zhangtao
+     */
     public function getusedhours($username)
     {
         if (empty($username))
@@ -189,9 +190,9 @@ class DBHTWUser extends DBHelpTheWorld {
     }
 
     /**
-     * Brief: get staff under the manager
+     * Brife: get the staff whose manager is loginname 
      * Return:
-     *     An array includes the staff
+     *     The Name array and not include the manager self
      */ 
     public function getmanagerstaff($loginname)
     {
@@ -210,6 +211,11 @@ class DBHTWUser extends DBHelpTheWorld {
         return $ret;
     }
 
+    /**
+     * Brife: Convert from username to loginname
+     * Return:
+     *     loginname
+     */
     public function getloginname($username)
     {
         $sql = "SELECT LoginName FROM tblEmployee
@@ -238,6 +244,11 @@ class DBHTWUser extends DBHelpTheWorld {
         return $ret[0]['Name'];
     }
 
+    /**
+     * Brife: get employee's attendance information and ApproverName
+     * Return:
+     *     ApproverID and all tblAttendance data
+     */
     public function getattendinfo($loginname)
     {
         $employeeID = $this->getuserinfo($loginname)['EmployeeID'];
@@ -247,6 +258,40 @@ class DBHTWUser extends DBHelpTheWorld {
         $ret = $this->runSQL($sql);
         
         if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret; 
+    }
+
+    public function getthismonthsalary($loginname)
+    {
+        $employeeID = $this->getuserinfo($loginname)['EmployeeID'];
+
+        $year_month = date('Y-m');
+        $sql = "SELECT * FROM tblSalary WHERE SalaryTime LIKE 
+            '%".$year_month."%' AND EmployeeID = $employeeID LIMIT 1";
+        $ret = $this->runSQL($sql);
+
+        if(0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret[0]; 
+    }
+   
+    
+    public function getallsalary($loginname)
+    {
+        $employeeID = $this->getuserinfo($loginname)['EmployeeID'];
+
+        $sql = "SELECT * FROM tblSalary WHERE 
+            EmployeeID = $employeeID";
+        $ret = $this->runSQL($sql);
+
+        if(0 == sizeof($ret))
         {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
@@ -453,6 +498,12 @@ class DBHTWUser extends DBHelpTheWorld {
         return $managername;
     }
 
+    /**
+     * Brife: get the employee's leave record
+     * Return:
+     *    ApproverName and all information in table tblLeave
+     * Date: 2015-11-14
+     */
     public function getstaffleaveinfo($loginname)
     {
         $deptid = $this->getuserinfo($loginname)['DeptID'];
@@ -470,6 +521,11 @@ class DBHTWUser extends DBHelpTheWorld {
 
         return $ret[0];
     }
+
+    /**
+     * Brife: get user's this month salary information
+     * Return:
+     */
 
     public function getsecureinfo($requestuser, $requesteduser) {
         $ret = $this->getinfo($requestuser, $requesteduser);

@@ -57,12 +57,6 @@ class WrapperDBUser {
         return $ret;
     }
 
-    /*
-     * Input: Employee's name
-     * Output:Employee's used hours in the tblLeave, It is not the whole
-     * used hours in the YearHoliday !
-     * Date:2015-11-12 Author:Zhangtao
-     */
     public function getusedhours($loginname)
     {
         $dbhtwuser = new DBHTWUser();
@@ -100,11 +94,6 @@ class WrapperDBUser {
 
     }
 
-    /**
-     * Brife: get the staff under the control of manager
-     * Return:
-     *     The staff array
-     */ 
     public function getmanagerstaff($loginname)
     {
         $dbhtwuser = new DBHTWUser();
@@ -117,11 +106,6 @@ class WrapperDBUser {
         return $ret;
     }
 
-    /**
-     * Brife: get the employee's leave record
-     * Return:
-     *     An array contains the leave record
-     */ 
     public function getstaffleaveinfo($loginname)
     {
         $dbhtwuser = new DBHTWUser();
@@ -133,12 +117,6 @@ class WrapperDBUser {
         $ret = $dbhtwuser->getstaffleaveinfo($loginname);
         return $ret;
     }
-
-    /**
-     * Brife: Convert from username to loginname
-     * Return:
-     *     loginname
-     */
 
     public function getloginname($username)
     {
@@ -174,9 +152,31 @@ class WrapperDBUser {
 
         $ret = $dbhtwuser->getattendinfo($loginname);
         return $ret;
-
     }
 
+    public function getthismonthsalary($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getthismonthsalary($loginname);
+        return $ret;
+    }
+
+    public function getallsalary($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $ret = $dbhtwuser->getallsalary($loginname);
+        return $ret;
+    }
     public function getsecureinfo($requestuser, $requesteduser) {
         $dbhtwuser = new DBHTWUser();
 

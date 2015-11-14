@@ -1,0 +1,93 @@
+<html>
+  <?php
+  if (!empty($_COOKIE['username'])) {
+  $username = $_COOKIE['username'];
+  $dbuser = new WrapperDBUser();
+  $salaryinfo = $dbuser->getthismonthsalary($username);
+  $allsalaryinfo = $dbuser->getallsalary($username);
+  }
+  ?>
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+      <h4>员工该月薪资详情</h4>
+      <tr>
+        <td>薪资编号</td>
+        <td>工资发放时间</td>
+        <td>基本工资</td>
+        <td>加班工资</td>
+        <td>缺勤扣除工资</td>
+        <td>其他工资</td>
+        <td>总工资</td>
+      </tr>
+      <?php
+         $state = false;
+         if ($salaryinfo != InterfaceError::ERR_INVALIDPARAMS)
+         {
+            $state = true;
+            echo "<tr>";
+            echo "<td>".$salaryinfo['SalaryID']."</td>";
+            echo "<td>".$salaryinfo['SalaryTime']."</td>";
+            echo "<td>".$salaryinfo['BasicSalary']."</td>";
+            echo "<td>".$salaryinfo['OvertimeSalary']."</td>";
+            echo "<td>".$salaryinfo['AbsenceSalary']."</td>";
+            echo "<td>".$salaryinfo['OtherSalary']."</td>";
+            echo "<td>".($salaryinfo['OvertimeSalary'] + 
+             $salaryinfo['AbsenceSalary'] + 
+             $salaryinfo['OtherSalary'] + $salaryinfo['BasicSalary'])."</td>";
+            echo "</tr>";
+         }
+         if ($state == false)
+         echo "<h2>无薪资发放记录!</h2>";
+         ?>
+    </tbody>
+  </table>
+  <hr/>
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+      <h4>员工所有薪资详情</h4>
+      <tr>
+        <td>薪资编号</td>
+        <td>工资发放时间</td>
+        <td>基本工资</td>
+        <td>加班工资</td>
+        <td>缺勤扣除工资</td>
+        <td>其他工资</td>
+      </tr>
+      <?php
+         $state = false;
+         for($i = 0; $i < sizeof($allsalaryinfo); $i++)
+         {
+         $salaryinfo = $allsalaryinfo[$i];
+         if ($salaryinfo != InterfaceError::ERR_INVALIDPARAMS)
+         {
+            $state = true;
+            echo "<tr>";
+            echo "<td>".$salaryinfo['SalaryID']."</td>";
+            echo "<td>".$salaryinfo['SalaryTime']."</td>";
+            echo "<td>".$salaryinfo['BasicSalary']."</td>";
+            echo "<td>".$salaryinfo['OvertimeSalary']."</td>";
+            echo "<td>".$salaryinfo['AbsenceSalary']."</td>";
+            echo "<td>".$salaryinfo['OtherSalary']."</td>";
+            echo "<td>".($salaryinfo['OvertimeSalary'] + 
+             $salaryinfo['AbsenceSalary'] + 
+             $salaryinfo['OtherSalary'] + $salaryinfo['BasicSalary'])."</td>";
+            echo "</tr>";
+         }
+         }
+         if ($state == false)
+         echo "<h2>无所有薪资记录!</h2>";
+         ?>
+    </tbody>
+  </table>
+
+
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

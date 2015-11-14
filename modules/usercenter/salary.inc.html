@@ -1,0 +1,29 @@
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#salaryinfo">薪资详情</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="salaryinfo" class="tab active">
+        <?php include('salaryinfo.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+jQuery(document).ready(function() {
+  jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+    var currentAttrValue = jQuery(this).attr('href');
+
+    // Show/Hide Tabs
+    jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+    // Change/remove current tab to active
+    jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+    e.preventDefault();
+  });
+});
+  </script>
+</html>

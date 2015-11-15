@@ -1,28 +1,26 @@
 <html>
-<form method="post" action="<?=$rootdir?>/bootstrap.php/good/release?frommobile=0&username=<?=$_COOKIE['username']?>">
-  <h1>发布沙发必填信息</h1>
-  <hr/>
-  <div>标题:<input type = "text" name = "title"/></div>
-  <div>选择照片:<input type = "file" name = "photos_id"/></div>
+<form method="post" action="<?=$rootdir?>/bootstrap.php/user/add?frommobile=0&username=<?=$_COOKIE['username']?>">
+  <div>姓名:<input type = "text" name = "Name"/></div>
   <div>
-    接待人数:
-    <select name = "capacity">
-      <option value = "1">1</option>
-      <option value = "2">2</option>
-      <option value = "3">3</option>
-      <option value = "4">4</option>
-      <option value = "5">5</option>
-      <option value = "6">6</option>
-      <option value = "7">7</option>
-      <option value = "8">8</option>
-      <option value = "9">9</option>
-      <option value = "10">10</option>
-    </select>
+    性别:&nbsp;&nbsp;
+    <label>男<input type = "radio" name = "provider_ownership_id" checked="checked" value="1"/></label>
+    <label>女<input type = "radio" name = "provider_ownership_id" value="2"/></label>
   </div>
+  <div>登陆名:<input type = "text" name = "LoginName"/></div>
+  <div>密码:<input type = "text" name = "Password"/></div>
+  <div>联系电话:<input type = "text" name = "Telephone"/></div>
+  <div>电子邮箱:<input type = "text" name = "Email"/></div>
+  <div>选择照片:<input type = "file" name = "PhotoImage"/></div>
   <div>
-    沙发与房主关系:&nbsp;&nbsp;
-    <label>物主<input type = "radio" name = "provider_ownership_id" checked="checked" value="1"/></label>
-    <label> 租用<input type = "radio" name = "provider_ownership_id" value="2"/></label>
+      所属部门:
+    <select name = "DeptID">
+      <option value = "1">人事部</option>
+      <option value = "2">财务部</option>
+      <option value = "3">行政部</option>
+      <option value = "4">销售部</option>
+      <option value = "5">研发部</option>
+      <option value = "6">信息部</option>
+    </select>
   </div>
 
   <div>

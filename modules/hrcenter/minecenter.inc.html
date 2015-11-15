@@ -1,0 +1,59 @@
+<html>
+  <div class="tabs">
+    <ul class="tab-links" style="margin-left: 80px;">
+      <li class="active"><a href="#staffdata">员薪资料管理</a></li>
+      <li><a href="#deptmanager">部门管理</a></li>
+      <li><a href="#leavemanager">请假管理</a></li>
+      <li><a href="#attendmanager">考勤管理</a></li>
+      <li><a href="#overtimemanager">加班管理</a></li>
+      <li><a href="#salarymanager">薪资管理</a></li>
+      <li><a href="#safetymanager">安全管理</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="staffdata" class="tab active">
+        <?php include('staffdata.inc.html'); ?>
+      </div>
+
+      <div id="deptmanager" class="tab">
+        <?php include('dept.inc.html'); ?>
+      </div>
+
+      <div id="leavemanager" class="tab">
+        <?php include('leave.inc.html'); ?>
+      </div>
+
+      <div id="attendmanager" class="tab">
+        <?php include('attend.inc.html'); ?>
+      </div>
+
+      <div id="overtimemanager" class="tab">
+        <?php include('overtime.inc.html'); ?>
+      </div>
+      
+      <div id="salarymanager" class="tab">
+        <?php include('salary.inc.html'); ?>
+      </div>
+
+      <div id="safetymanager" class="tab">
+        <?php include('safety.inc.html'); ?>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs .tab-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

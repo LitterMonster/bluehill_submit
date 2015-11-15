@@ -91,6 +91,36 @@ class DBHTWUser extends DBHelpTheWorld {
         //return $ret;
     }
 
+    public function hrlogin(array $user) {
+        if (empty($user['username']) ||
+            empty($user['password'])) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $username = $user['username'];
+        $password = $user['password'];
+
+        $deptid = $this->getuserinfo($username)['DeptID'];
+        
+        if ($deptid != 1)
+        {
+            return InterfaceError::ERR_NOSUCHUSER;
+        }
+
+        $sql = "SELECT * FROM tblEmployee WHERE LoginName = '".$username.
+            "' AND Password = '".$password."' AND DeptID = 1";
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        } else {
+            return InterfaceError::ERR_OK;
+        }
+
+        //$this->updatelastaccess($username);
+        //$userinfo = $this->getinfo($username, $username);
+        //return $ret;
+    }
     /**
      * Return:
      *     all  tblLeave information when username is not null
@@ -478,12 +508,18 @@ class DBHTWUser extends DBHelpTheWorld {
         return $userinfo;
     }
 
+    /**
+     * Brife: get manager' deptname through deptid
+     * Return:
+     *     manager's Name , DeptName 
+     * Date:2015-11-15
+     */ 
+
     public function getdeptinfo($deptid)
     {
         if (empty($deptid))
         {
-            echo "部门编号为空!";
-            die;
+            return InterfaceError::ERR_INVALIDPARAMS;
         }
 
         $sql = 'SELECT a.Name, b.DeptName from tblEmployee as a, tblDepartment'.
@@ -523,9 +559,33 @@ class DBHTWUser extends DBHelpTheWorld {
     }
 
     /**
-     * Brife: get user's this month salary information
+     * Brife: get dept name through login
      * Return:
-     */
+     *     deptname
+     */ 
+    public function getdeptname($loginname)
+    {
+        if (empty($loginname))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $deptid = $this->getuserinfo($loginname)['DeptID'];
+
+        $sql = "SELECT DeptName FROM tblDepartment WHERE
+        DeptID = $deptid";
+
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret[0]['DeptName'];
+
+    }
+
 
     public function getsecureinfo($requestuser, $requesteduser) {
         $ret = $this->getinfo($requestuser, $requesteduser);

@@ -99,6 +99,88 @@ class InterfaceUser {
         //return $this->processLoginSuccess($ret, gotoSigninFail);
     }
 
+    public function hrsigninAction() {
+        $params = LibMisc::getParams();
+        $frommobile = $params['frommobile'];
+        $username = $params['username'];
+        $password = $params['password'];
+        //echo "username:".$username."====password:".$password;
+        //die;
+
+        if (empty($username) || empty($password)) {
+            if (0 == $frommobile) {
+                return $this->gotoSigninFail(
+                    InterfaceError::ERR_INVALIDPARAMS);
+            } else {
+                $error = new InterfaceError();
+                return $error->errorAction(
+                    InterfaceError::ERR_INVALIDPARAMS,
+                    $params);
+            }
+        }
+
+        $dbuser = new WrapperDBUser();
+        $user = array("username"=>$username,
+            "password"=>$password);
+        $ret = $dbuser->hrlogin($user);
+
+        return $this->gotohrLoginSuccess($ret);
+        //return $this->processLoginSuccess($ret, gotoSigninFail);
+    }
+
+    public function addstaffAction()
+    {
+        $params = LibMisc::getParams();
+
+
+    }
+
+    function gotohrLoginSuccess($result) {
+        global $rootdir;
+        $params = LibMisc::getParams();
+        $frommobile = $params['frommobile'];
+        $username = $params['username'];
+
+        if (0 == $frommobile) {
+            if ($result == InterfaceError::ERR_OK)
+            {
+            $url = $rootdir."/modules/hrcenter/minecenter.php?username="
+                .$username."&login_status=".true;
+            $result = "<script>url=\"$url\";".
+                "window.location.href=url;".
+                "</script>";
+
+            return $result;
+            } 
+            else if ($result == InterfaceError::ERR_NOSUCHUSER)
+            {
+                $js = "<script language='javascript' type = 'text/javascript'
+                    >alert('您不是人事部员工,禁止登陆！');</script>";
+                $url = $rootdir."/info_manager.php";
+                $result = $js."<script>url=\"$url\";".
+                    "window.location.href=url;".
+                    "</script>";
+
+                return $result;
+                
+            } else {
+                $js = "<script language='javascript' type = 'text/javascript'
+                    >alert('用户名或密码错误！');</script>";
+                $url = $rootdir."/info_manager.php";
+                $result = $js."<script>url=\"$url\";".
+                    "window.location.href=url;".
+                    "</script>";
+
+                return $result;
+                
+            }
+        } else {
+            $error = new InterfaceError();
+            return $error->errorAction(
+                InterfaceError::ERR_OK, $result);
+        }
+    }
+
     function processLoginSuccess($ret, $failfunc) {
         $error = new InterfaceError();
 

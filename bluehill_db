@@ -179,6 +179,7 @@ function init_tblEmployee_table() {
     create_table tblEmployee \
         "EmployeeID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         Name VARCHAR(50) NOT NULL UNIQUE,
+        Sex CHAR(2) NOT NULL ,
         LoginName VARCHAR(20) NOT NULL UNIQUE,
         Password VARCHAR(20),
         Email VARCHAR(50) NOT NULL,
@@ -195,53 +196,53 @@ function init_tblEmployee_table() {
         REFERENCES tblDepartment (DeptID),
         check(LoginName <> Name and len(ltrim(LoginName)) <> 0)"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'曹操','admin','1234567','hangwang@bluehill.com',1,6000,'President&CEO','8888','2002-07-15','Enjoy Everyday！', 43,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'曹操','男','admin','1234567','hangwang@bluehill.com',1,6000,'President&CEO','8888','2002-07-15','Enjoy Everyday！', 43,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'刘备','gwshangsdf','1234567','gwshang@bluehill.com',2,2000,'FinanceManager','85111111','2002-05-22',NULL, 77,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'刘备','男','gwshangsdf','1234567','gwshang@bluehill.com',2,2000,'FinanceManager','85111111','2002-05-22',NULL, 77,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'诸葛亮','tchen','1234567','tchen@bluehill.com',3,3000,'Accountant','8533','2003-01-27',NULL, 66,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'诸葛亮','男','tchen','1234567','tchen@bluehill.com',3,3000,'Accountant','8533','2003-01-27',NULL, 66,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'孙权','ychen','1234567','ychen@bluehill.com',4,1000,'Accountant','8515','2002-07-10',NULL, 47,1,NULL" 
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙权','男','ychen','1234567','ychen@bluehill.com',4,1000,'Accountant','8515','2002-07-10',NULL, 47,1,NULL" 
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'张飞','yqi','1234567','yqi@bluehill.com',5,1000,'啊啊啊','8517','2002-08-26',NULL,57,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'张飞','男','yqi','1234567','yqi@bluehill.com',5,1000,'啊啊啊','8517','2002-08-26',NULL,57,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'赵子龙','jcao','1234567','jcao@bluehill.com',6,1000,'Receptionist','8505','2002-10-08',NULL, 47,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'赵子龙','男','jcao','1234567','jcao@bluehill.com',6,1000,'Receptionist','8505','2002-10-08',NULL, 47,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'黄忠','lsa','1234567','lsa@bluehill.com',6,1500,'HR Assistant','8518','2002-12-02',NULL,37,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'黄忠','男','lsa','1234567','lsa@bluehill.com',6,1500,'HR Assistant','8518','2002-12-02',NULL,37,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'鲁肃','mchen','1234567','mchen@bluehill.com',5,1000,'Accountant','8547 ','2003-05-06',NULL, 80,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'鲁肃','男','mchen','1234567','mchen@bluehill.com',5,1000,'Accountant','8547 ','2003-05-06',NULL, 80,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'小乔','tyu','1234567','tyu@bluehill.com',1,500,'Senior CoursewareDeveloper','8478','2003-05-08',NULL, 34,NULL,NULL" 
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'小乔','女','tyu','1234567','tyu@bluehill.com',1,500,'Senior CoursewareDeveloper','8478','2003-05-08',NULL, 34,NULL,NULL" 
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'孙夫人','jhe','1234567','jhe@bluehill.com',2,500,'Senior CoursewareDeveloper','8456','2003-06-02',NULL, 43,NULL,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙夫人','女','jhe','1234567','jhe@bluehill.com',2,500,'Senior CoursewareDeveloper','8456','2003-06-02',NULL, 43,NULL,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'姜维','qjiang','1234567','qjiang@bluehill.com',3,500,'LocalizationManager','8961','2003-04-17',NULL, 46,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'姜维','男','qjiang','1234567','qjiang@bluehill.com',3,500,'LocalizationManager','8961','2003-04-17',NULL, 46,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'周瑜','22tzhang','1234567','tzhang@bluehill.com',4,1233,'Director ','8900','2003-05-16', NULL, 53,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'周瑜','男','22tzhang','1234567','tzhang@bluehill.com',4,1233,'Director ','8900','2003-05-16', NULL, 53,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'夏侯渊','cwu','1234567','cwu@bluehill.com',5,4000,'HR Manager','8516','2002-06-01','gfh', 41,1,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'夏侯渊','男','cwu','1234567','cwu@bluehill.com',5,4000,'HR Manager','8516','2002-06-01','gfh', 41,1,NULL"
 
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'孙策','cgong','1234567','cgong@bluehill.com',6,2000,'HR Assistant','8860','2003-10-27', NULL, 44,NULL,NULL"                                                                   
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'孙皓','sli','1234567','sli@bluehill.com',1,3000,'Manager','8862','2003-10-27',NULL,64,NULL,NULL"                                                                               
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'司马昭','mzhang','1234567','mzhang@bluehill.com',2,1000,'Employee','1111111123','2003-10-27',NULL, 63,NULL,NULL"                                                                         
-        insert_value tblEmployee "Name,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
-        "'司马师','jwang','1234567','jwang@bluehill.com',3,1500,'Employee','8865','2003-10-27', NULL, 53,NULL,NULL"
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙策','男','cgong','1234567','cgong@bluehill.com',6,2000,'HR Assistant','8860','2003-10-27', NULL, 44,NULL,NULL"                                                                   
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'孙皓','男','sli','1234567','sli@bluehill.com',1,3000,'Manager','8862','2003-10-27',NULL,64,NULL,NULL"                                                                               
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'司马昭','男','mzhang','1234567','mzhang@bluehill.com',2,1000,'Employee','1111111123','2003-10-27',NULL, 63,NULL,NULL"                                                                         
+        insert_value tblEmployee "Name,Sex,LoginName,Password,Email,DeptID,BasicSalary,Title,Telephone,OnboardDate,SelfIntro,VacationRemain,EmployeeLevel,PhotoImage" \
+        "'司马师','男','jwang','1234567','jwang@bluehill.com',3,1500,'Employee','8865','2003-10-27', NULL, 53,NULL,NULL"
         #add tblDepartment foreign key constraint
         add_table_constraint tblDepartment "add foreign key(ManagerID) references tblEmployee(EmployeeID)"
 }

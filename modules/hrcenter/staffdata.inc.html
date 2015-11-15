@@ -1,0 +1,59 @@
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#addstaff">添加新员工</a></li>
+      <li><a href="#modfystaff">修改员工信息</a></li>
+      <li><a href="#deletestaff">删除员工信息</a></li>
+      <li><a href="#searchstaff">搜索员工信息</a></li>
+      <li><a href="#printstaff">打印员工报单</a></li>
+      <li><a href="#uploadpicture">上传员工照片</a></li>
+      <li><a href="#modifypicture">修改员工照片</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="addstaff" class="tab active">
+        <?php include('addstaff.inc.html'); ?>
+      </div>
+
+      <div id="modifystaff" class="tab active">
+        <?php include('modifystaff.inc.html'); ?>
+      </div>
+
+      <div id="deletestaff" class="tab active">
+        <?php include('deletestaff.inc.html'); ?>
+      </div>
+
+      <div id="searchstaff" class="tab active">
+        <?php include('searchstaff.inc.html'); ?>
+      </div>
+
+      <div id="printstaff" class="tab active">
+        <?php include('printstaff.inc.html'); ?>
+      </div>
+
+      <div id="uploadpicture" class="tab active">
+        <?php include('uploadpicture.inc.html'); ?>
+      </div>
+
+      <div id="modifypicture" class="tab active">
+        <?php include('modifypicture.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

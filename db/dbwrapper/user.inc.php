@@ -33,6 +33,21 @@ class WrapperDBUser {
         return $ret;
     }
 
+    public function hrlogin(array $user)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($user['password'])) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        //$user['password'] = $this->encPassword(
+        //    $user['password']);
+
+        $ret = $dbhtwuser->hrlogin($user);
+        return $ret;
+    }
+
     public function getuserinfo($username) {
         $dbhtwuser = new DBHTWUser();
 
@@ -54,6 +69,18 @@ class WrapperDBUser {
             die;
         }
         $ret = $dbhtwuser->getdeptinfo($deptid);
+        return $ret;
+    }
+    
+    public function getdeptname($loginname)
+    {
+        $dbhtwuser = new DBHTWUser();
+
+        if (empty($loginname))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+        $ret = $dbhtwuser->getdeptname($loginname);
         return $ret;
     }
 

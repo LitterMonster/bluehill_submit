@@ -1,17 +1,47 @@
 <html>
   <center>
       <h2>人事信息管理系统</h2>
-  </center>
   <hr/>
-  <!--
-<div id="header" class="header w">
-  <div class="promotion">
-    <div class="row clearfix" align="center">
-      <div id="logo" class="logo grid grid_6">
-        <img src="<?=$rootdir?>/images/mainlogo.png">
+    <div id="header" class="header w">
+      <div class="promotion">
+        <div class="row clearfix">
+          <div id="nav" class="header-nav pr grid grid_32 nav">
+            <ul id="login-bar" class="nav user-nav clearfix fr menu">
+
+              <li><a href="<?=$rootdir?>/">首页</a></li>
+              <li class="divider">|</li>
+
+              <?php
+                  if (!$isShowMainOnly) {
+                  ?>
+                  <?php  
+                  if (0 == $_COOKIE['login_status']) {
+                  ?>
+                  <li>当前无用户!</li>
+                  <li class="divider">|</li>
+                  <?php
+                      } else {
+                      $dbmanager = new WrapperDBUser();
+                      $managername = $dbmanager->getdeptname($_COOKIE['username']);
+                      ?>
+                      <li>当前用户:</li>
+                      <li><a href="#" class="parent"><?=$_COOKIE['username']?></a>
+                        <ul>
+                          <li><a href="<?=$rootdir?>/bootstrap.php/user/signout">退出登录</a></li>
+                        </ul>
+                      </li>
+                      <li>所属部门:</li>
+                      <li><a href="#" class="parent"><?=$managername?></a>
+                      <?php
+                                 }
+                                 ?>
+                                 <?php
+                                 }
+                                 ?>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-  -->
+  </center>
 </html>

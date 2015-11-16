@@ -75,8 +75,6 @@ class InterfaceUser {
         $frommobile = $params['frommobile'];
         $username = $params['username'];
         $password = $params['password'];
-        //echo "username:".$username."====password:".$password;
-        //die;
 
         if (empty($username) || empty($password)) {
             if (0 == $frommobile) {
@@ -147,23 +145,25 @@ class InterfaceUser {
     private function gotoAddstaffSuccess($result)
     {
         global $rootdir;
+        $params = LibMisc::getParams();
+        $username = $params['username'];
         if ($result == InterfaceError::ERR_OK)
         {
            print "<script >alert('新员工添加成功!');</script>";
            $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
-$_COOKIE['username']."&login_status=1";
+$username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         } else if ($result == InterfaceError::ERR_DBIO){
            print "<script >alert('新员工添加失败!');</script>";
            $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
-$_COOKIE['username']."&login_status=1";
+$username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         } else if ($result == InterfaceError::ERR_INVALIDPARAMS) {
            print "<script >alert('重要属性为空!');</script>";
            $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
-$_COOKIE['username']."&login_status=1";
+$username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         }
@@ -173,30 +173,31 @@ $_COOKIE['username']."&login_status=1";
     {
         global $rootdir;
         $params = LibMisc::getParams();
+        $username = $params['username'];
         
         if (empty($params['Name']))
         {
            print "<script >alert('真实姓名不能为空!');</script>";
            $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
-$_COOKIE['username']."&login_status=1";
+$username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         } else if (empty($params['LoginName'])){
            print "<script >alert('登陆名不能为空!');</script>";
            $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
-$_COOKIE['username']."&login_status=1";
+$username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         } else if (empty($params['Password'])){
            print "<script >alert('登陆密码不能为空!');</script>";
            $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
-$_COOKIE['username']."&login_status=1";
+$username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         }  else if (empty($params['Telephone'])){
            print "<script >alert('电话号码不能为空!');</script>";
            $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
-$_COOKIE['username']."&login_status=1";
+$username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         } 
@@ -277,6 +278,14 @@ $_COOKIE['username']."&login_status=1";
             "introduction"=>$params['introduction']); 
         $dbuser = new WrapperDBUser();
         $ret = $dbuser->updateuserdata($userdata);
+        return $this->gotoUpdatebaseinfo($ret);
+    }
+
+    public function gotoUpdatebaseinfo($ret)
+    {
+        global $rootdir;
+        $params = LibMisc::getParams();
+        $username = $params['username'];
         if ($ret == InterfaceError::ERR_OK)
         {
             $js = "<script language='javascript' type = 'text/javascript'

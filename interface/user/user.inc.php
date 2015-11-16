@@ -261,6 +261,82 @@ $username."&login_status=1";
         return $this->gotoLoginSuccess($ret);
     }
 
+    public function updatestaffbaseAction()
+    {
+        $params = LibMisc::getParams();
+        $username = $params['username'];
+        if (!empty($_COOKIE['username']) &&
+            $username != $_COOKIE['username']) {
+            $error = new InterfaceError();
+            return $error->errorAction(
+                InterfaceError::ERR_PERM, $params);            
+        }
+
+        $staffdata = array(
+            "username"=>$username,
+            "Name"=>$params['Name'],
+            "Sex"=>$params['Sex'],
+            "LoginName"=>$params['LoginName'],
+            "Password"=>$params['Password'],
+            "Telephone"=>$params['Telephone'],
+            "Email"=>$params['Email'],
+            "DeptID"=>$params['DeptID'],
+            "BasicSalary"=>$params['BasicSalary'],
+            "Title"=>$params['Title'],
+            "OnboardDate"=>$params['OnboardDate'],
+            "VacationRemain"=>$params['VacationRemain'],
+            "EmployeeLevel"=>$params['EmployeeLevel'],
+            "PhotoImage"=>$params['PhotoImage'],);
+        $dbuser = new WrapperDBUser();
+        $ret = $dbuser->updatestaffbase($staffdata);
+        return $this->gotoUpdatestaffbase($ret);
+    }
+
+    public function gotoUpdatestaffbase($ret)
+    {
+        global $rootdir;
+        $params = LibMisc::getParams();
+        $username = $params['username'];
+        $loginname = $params['LoginName'];
+        $deptid = $params['DeptID'];
+        if ($ret == InterfaceError::ERR_OK)
+        {
+            $js = "<script language='javascript' type = 'text/javascript'
+                >alert('修改成功！');</script>";
+            $url = $rootdir."/modules/hrcenter/importdept.php?username=".
+                "$username"."&deptid=$deptid&login_status=".true;
+            $result = $js."<script>url=\"$url\";".
+                "window.location.href=url;".
+                "</script>";
+
+            return $result;
+        } else if ($ret == InterfaceError::ERR_NULLKEYWORD){
+            $js = "<script language='javascript' type = 'text/javascript'
+                >alert('关键属性不能为空！');</script>";
+            $url = $rootdir."/modules/hrcenter/importdept.php?username=".
+                "$username"."&deptid=$deptid&login_status=".true;
+            $result = $js."<script>url=\"$url\";".
+                "window.location.href=url;".
+                "</script>";
+
+            return $result;
+        } else if ($ret == InterfaceError::ERR_INVALIDPARAMS){
+            $js = "<script language='javascript' type = 'text/javascript'
+                >alert('修改失败！');</script>";
+            $url = $rootdir."/modules/hrcenter/importdept.php?username=".
+                "$username"."&deptid=$deptid&login_status=".true;
+            $result = $js."<script>url=\"$url\";".
+                "window.location.href=url;".
+                "</script>";
+
+            return $result;
+        }
+
+        //$error = new InterfaceError();
+        //return $error->errorAction($ret, null);
+    }
+
+
     public function updatebaseinfoAction() {
         global $rootdir;
         $params = LibMisc::getParams();

@@ -1,0 +1,76 @@
+<html>
+  <?php
+  if (!empty($_COOKIE['username'])) {
+  $username = $_COOKIE['username'];
+  $dbuser = new WrapperDBUser();
+  $deptstaff = $dbuser->getdeptstaff($deptid);
+  $deptname = $dbuser->getdeptinfo($deptid)['DeptName'];
+  }
+  ?>
+  <center>
+  <table class="userdata_base_label" border = "2">
+    <tbody>
+      <tr>
+        <td>员工ID</td>
+        <td>真实姓名</td>
+        <td>性 别</td>
+        <td>登陆名称</td>
+        <td>登陆密码</td>
+        <td>邮 箱</td>
+        <td>隶属部门</td>
+        <td>基本工资</td>
+        <td>员工职位名称</td>
+        <td>联系电话</td>
+        <td>注册日期</td>
+        <td>自我介绍</td>
+        <td>剩余年假</td>
+        <td>员工级别</td>
+        <td>员工照片</td>
+        <td>修改</td>
+      </tr>
+      <?php
+         $state = false;
+         if ($deptstaff != InterfaceError::ERR_INVALIDPARAMS)
+         {
+           for($i = 0; $i < sizeof($deptstaff); $i++)
+           {
+           $loginname = $deptstaff[$i]['LoginName'];
+           $state = true;
+           echo "<tr>";
+           echo "<td>".$deptstaff[$i]['EmployeeID']."</td>";
+           echo "<td>".$deptstaff[$i]['Name']."</td>";
+           echo "<td>".$deptstaff[$i]['Sex']."</td>";
+           echo "<td>".$deptstaff[$i]['LoginName']."</td>";
+           echo "<td>".$deptstaff[$i]['Password']."</td>";
+           echo "<td>".$deptstaff[$i]['Email']."</td>";
+           echo "<td>".$deptname."</td>";
+           echo "<td>".$deptstaff[$i]['BasicSalary']."</td>";
+           echo "<td>".$deptstaff[$i]['Title']."</td>";
+           echo "<td>".$deptstaff[$i]['Telephone']."</td>";
+           echo "<td>".$deptstaff[$i]['OnboardDate']."</td>";
+           echo "<td>".$deptstaff[$i]['SelfIntro']."</td>";
+           echo "<td>".$deptstaff[$i]['VacationRemain']."</td>";
+           echo "<td>".$deptstaff[$i]['EmployeeLevel']."</td>";
+           echo "<td>".$deptstaff[$i]['PhotoImage']."</td>";
+           echo "<td> <form action = \""."modifystaffbase.php?LoginName=".
+           "$loginname"."&login_status=1&username=".$username."\" method = 'POST'>"."<button class=\"btn btn-success btn-block\" type='submit'>修改
+           </button></form> </td>";
+           echo "</tr>";
+           }
+         }
+         if ($state == false)
+         echo "<h2>该部门无员工信息!</h2>";
+         ?>
+    </tbody>
+  </table>
+  </center>
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

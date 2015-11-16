@@ -49,14 +49,14 @@ class WrapperDBUser {
         return $ret;
     }
 
-    public function getuserinfo($username) {
+    public function getuserinfo($loginname) {
         $dbhtwuser = new DBHTWUser();
 
-        if (empty($username)) {
+        if (empty($loginname)) {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
 
-        $ret = $dbhtwuser->getuserinfo($username);
+        $ret = $dbhtwuser->getuserinfo($loginname);
         return $ret;
     }
 
@@ -205,6 +205,20 @@ class WrapperDBUser {
         $ret = $dbhtwuser->getallsalary($loginname);
         return $ret;
     }
+    
+    public function getdeptstaff($deptid)
+    {
+        if (empty($deptid))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $dbhtwuser = new DBHTWUser();
+
+        $ret = $dbhtwuser->getdeptstaff($deptid);
+        return $ret;
+    }
+
     public function getsecureinfo($requestuser, $requesteduser) {
         $dbhtwuser = new DBHTWUser();
 
@@ -263,6 +277,16 @@ class WrapperDBUser {
 
         $dbhtwuser = new DBHTWUser();
         $ret = $dbhtwuser->updateuserdata($data);
+        return $ret;
+    }
+
+    public function updatestaffbase(array $data) {
+        if (empty($data)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        } 
+
+        $dbhtwuser = new DBHTWUser();
+        $ret = $dbhtwuser->updatestaffbase($data);
         return $ret;
     }
 

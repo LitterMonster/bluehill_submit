@@ -1,0 +1,92 @@
+<html>
+  <?php
+  $params = LibMisc::getParams();
+  $loginname = $params['LoginName'];
+  $dbuser = new WrapperDBUser();
+  $userinfo = $dbuser->getuserinfo($loginname);
+  $deptname = $dbuser->getdeptinfo($userinfo['DeptID'])['DeptName'];
+  ?>
+  <form method="post" action="<?=$rootdir?>/bootstrap.php/user/updatestaffbase?frommobile=0&username=<?=$_COOKIE['username']?>">
+  <table class="userdata_base_label" border = "1" width="800">
+    <tbody>
+    <tr>姓 名:</tr>
+    <tr><input type = "text" name = "Name"
+         class="form-control uname"
+         placeholder="姓名" value="<?=$userinfo['Name']?>"/></tr>
+    <tr><div>性 别:
+        <?php
+                              if ($userinfo['Sex'] == '男') {
+        ?>
+      <label>男<input type = "radio" name = "Sex" 
+                              checked="checked" value="男"/></label>
+      <label>女<input type = "radio" name = "Sex" 
+                               value="女"/></label>
+      <?php } else { ?>
+      <label>男<input type = "radio" name = "Sex" 
+                               value="男"/></label>
+      <label>女<input type = "radio" name = "Sex" 
+                               checked="checked" value="女"/></label>
+      <?php } ?>
+      </div></tr>
+      <tr><div>登陆名:<input type = "text" name = "LoginName" 
+         class="form-control uname"
+                                                 value="<?=$userinfo['LoginName']?>" placeholder="登录名"/></div></tr>
+    <tr><div>密 码:<input type = "text" name = "Password" 
+         class="form-control uname"
+      value="<?=$userinfo['Password']?>" placeholder="密码"/></div></tr>
+    <tr><div>电 话:<input type = "text" name = "Telephone" 
+         class="form-control uname"
+                                         value="<?=$userinfo['Telephone']?>" placeholder="联系电话"/></div></tr>
+    <tr><div>电子邮箱:<input type = "text" name = "Email" 
+         class="form-control uname"
+                                                                             value="<?=$userinfo['Email']?>" placeholder="电子邮箱"/></div></tr>
+    <tr>
+      所属部门:
+      <select name = "DeptID" class="form-control uname">
+        <option value = "<?=$userinfo['DeptID']?>"><?=$deptname?></option>
+        <option value = "1">人事部</option>
+        <option value = "2">财务部</option>
+        <option value = "3">行政部</option>
+        <option value = "4">销售部</option>
+        <option value = "5">研发部</option>
+        <option value = "6">信息部</option>
+      </select>
+    </tr>
+    <tr>基本工资:</tr>
+    <tr><input type = "text" name = "BasicSalary"
+         class="form-control uname"
+         placeholder="基本工资" value="<?=$userinfo['BasicSalary']?>"/></tr>
+    <tr>职位名称:</tr>
+    <tr><input type = "text" name = "Title"
+         class="form-control uname"
+         placeholder="职位名称" value="<?=$userinfo['Title']?>"/></tr>
+    <tr>登记时间</tr>
+    <tr><input type = "text" name = "OnboardDate"
+         class="form-control uname"
+         placeholder="登记时间" value="<?=$userinfo['OnboardDate']?>"/></tr>
+    <tr>剩余年假:</tr>
+    <tr><input type = "text" name = "VacationRemain"
+         class="form-control uname"
+         placeholder="剩余年假" value="<?=$userinfo['VacationRemain']?>"/></tr>
+    <tr>员工等级:</tr>
+    <tr><input type = "text" name = "EmployeeLevel"
+         class="form-control uname"
+         placeholder="员工等级" value="<?=$userinfo['EmployeeLevel']?>"/></tr>
+    <tr>照 片:<input type = "file" name = "PhotoImage"
+                              value="<?=$userinfo['PhotoImage']?>"/></tr>
+    <hr/>
+    <tr><button  class="btn btn-success btn-block" 
+                 type = "submit">提交</button></tr>
+    </tbody>
+  </table>
+  </form>
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

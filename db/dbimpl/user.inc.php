@@ -323,6 +323,25 @@ class DBHTWUser extends DBHelpTheWorld {
 
         return $ret; 
     }
+
+    public function getdeptstaff($deptid)
+    {
+        if (empty($deptid))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $sql = "SELECT * FROM tblEmployee WHERE DeptID = $deptid";
+        $ret = $this->runSQL($sql);
+
+        if (0 == sizeof($ret))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        return $ret;
+    }
+
     private function reorganizeSecureInfo($secureinfo) {
         if (empty($secureinfo)) {
             return $secureinfo;
@@ -485,13 +504,13 @@ class DBHTWUser extends DBHelpTheWorld {
      *      After login, the user information will be returned
      *      When another guy want to look the profile of another guy
      */
-    public function getuserinfo($username) {
-        if (empty($username)) {
+    public function getuserinfo($loginname) {
+        if (empty($loginname)) {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
 
         $sql = 'SELECT * FROM tblEmployee  '.
-            'where LoginName=\''.$username.'\' LIMIT 1';
+            'where LoginName=\''.$loginname.'\' LIMIT 1';
         $ret = $this->runSQL($sql);
         if (0 == sizeof($ret)) {
            return InterfaceError::ERR_NOSUCHUSER; 
@@ -677,6 +696,13 @@ class DBHTWUser extends DBHelpTheWorld {
         return $ret[0]['id'];
     }
 
+    /**
+     * Brief: update SelfIntro and password in info_search module
+     * Return:
+     *     the update state
+     *     Success:InterfaceError::ERR_OK;
+     *     Fail: InterfaceError::ERR_INVALIDPARAMS
+     */ 
     public function updateuserdata(array $data) {
         if (empty($data)) {
             return InterfaceError::ERR_INVALIDPARAMS;
@@ -702,96 +728,55 @@ class DBHTWUser extends DBHelpTheWorld {
             return InterfaceError::ERR_OK;
         }
         return InterfaceError::INVALIDPARAMS;
-       /* 
-        $baseinfo = $this->getbaseinfo($data['username']);
-        if (empty($baseinfo)) {
-            return InterfaceError::ERR_PERM;
-        }
-        
-        $fields = "(";
-        $values = "(";
-        $updates = "";
-
-        $fields = $fields."user_id, ";
-        $values = $values."'".$baseinfo['user_id']."', ";
-
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "name", $data['name']);
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "nickname", $data['nickname']);
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "introduction", $data['introduction']);
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "avatar", $data['avatar']);
-
-        if (!empty($data['gendertag'])) {
-            $id = $this->getgendertagid($data['gendertag']);
-        }
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "gender_tag_id", $id);
-
-        $fields = trim($fields);
-        $values = trim($values);
-        $updates = trim($updates);
-
-        if (',' == $fields{strlen($fields) - 1}) {
-            $fields = substr($fields, 0, strlen($fields) - 1);
-            $values = substr($values, 0, strlen($values) - 1);
-            $updates = substr($updates, 0, strlen($updates) - 1);
+    }
+    
+    /**
+     * Brief: update a staff's all information in info_manager module
+     * Return:
+     *     the update state
+     *     Success:InterfaceError::ERR_OK;
+     *     Fail: InterfaceError::ERR_INVALIDPARAMS
+     */ 
+    public function updatestaffbase(array $data)
+    {
+        if (empty($data)) {
+            return InterfaceError::ERR_INVALIDPARAMS;
         }
 
-        $fields = $fields.")";
-        $values = $values.")";
+        $loginname = $data['LoginName'];
+        $userinfo = $this->getuserinfo($loginname);
+        $employeeid = $userinfo['EmployeeID'];
+        $sex = $data['Sex'];
+        $name = $data['Name'];
+        $password = $data['Password'];
+        $telephone = $data['Telephone'];
+        $email = $data['Email'];
+        $deptid = $data['DeptID'];
+        $basicsalary = $data['BasicSalary'];
+        $title = $data['Title'];
+        $onboarddate = $data['OnboardDate'];
+        $vacationremain = $data['VacationRemain'];
+        $employeelevel = $data['EmployeeLevel'];
+        $photoimage = $data['PhotoImage'];
 
-        $sql = 'INSERT INTO userinfo_extend '.$fields.
-            ' VALUES '.$values.' ON DUPLICATE KEY UPDATE '.$updates;
-        $ret = $this->runSQL($sql);
-
-        if (!empty($data['dateofbirth'])) {
-            $dateofbirth = $data['dateofbirth'];
-            $dateofbirth = str_replace("年", "-", $dateofbirth);
-            $dateofbirth = str_replace("月", "-", $dateofbirth);
-            $dateofbirth = str_replace("日", "", $dateofbirth);
-            $dateofbirth = date('Y-m-d', strtotime($dateofbirth));
+        if (empty($loginname) || empty($name) || empty($password) || 
+            empty($telephone)) {
+            return InterfaceError::ERR_NULLKEYWORD;
         }
 
-        $fields = "(";
-        $values = "(";
-        $updates = "";
+        $sql = "UPDATE tblEmployee SET Name = '".$name."', Sex = '".$sex."',
+        LoginName = '".$loginname."', Password = '".$password."', Telephone = '".
+        $telephone."', Email = '".$email."', DeptID = $deptid, BasicSalary ='".
+        $basicsalary."', Title = '".$title."', OnboardDate = '".$onboarddate."',
+        VacationRemain = '".$vacationremain."', EmployeeLevel = '".
+        $employeelevel."', PhotoImage = '".$photoimage."' WHERE EmployeeID = ".
+        $employeeid;
 
-        $fields = $fields."user_id, ";
-        $values = $values."'".$baseinfo['user_id']."', ";
 
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "dateofbirth", $dateofbirth);
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "mobile", $data['mobile']);
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "qqno", $data['qqno']);
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "wechat", $data['wechat']);
-        LibMisc::appendAffectedVolumn($fields, 
-            $values, $updates, "email", $data['email']);
-
-        $fields = trim($fields);
-        $values = trim($values);
-        $updates = trim($updates);
-
-        if (',' == $fields{strlen($fields) - 1}) {
-            $fields = substr($fields, 0, strlen($fields) - 1);
-            $values = substr($values, 0, strlen($values) - 1);
-            $updates = substr($updates, 0, strlen($updates) - 1);
-        }
-
-        $fields = $fields.")";
-        $values = $values.")";
-
-        $sql = 'INSERT INTO userinfo_secure '.$fields.
-            ' VALUES '.$values.' ON DUPLICATE KEY UPDATE '.$updates;
         $ret = $this->runSQL($sql);
 
         return InterfaceError::ERR_OK;
-        */
+
     }
 
     /**

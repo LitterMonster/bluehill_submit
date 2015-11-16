@@ -6,16 +6,17 @@ class WrapperDBUser {
         return md5(md5($password).$salt);
     }
 
-    public function add(array $user) {
-        if (empty($user['password'])) {
+    public function addstaff(array $staff) {
+        if (empty($staff['Name']) || empty($staff['LoginName']) 
+            || empty($staff['Password']) || empty($staff['Telephone'])) {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
 
-        $user['password'] = $this->encPassword(
-            $user['password']);
+        // $user['password'] = $this->encPassword(
+        //    $user['password']);
 
         $dbhtwuser = new DBHTWUser();
-        $ret = $dbhtwuser->add($user);
+        $ret = $dbhtwuser->addstaff($staff);
         return $ret;
     }
 
@@ -281,8 +282,8 @@ class WrapperDBUser {
         }
 
         $dbhtwuser = new DBHTWUser();
-        $ret = $dbhtwuser->updatelastaccess($username);
-        return $ret;
+        //$ret = $dbhtwuser->updatelastaccess($username);
+        //return $ret;
     }
 }
 ?>

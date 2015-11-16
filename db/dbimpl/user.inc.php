@@ -32,39 +32,34 @@ class DBHTWUser extends DBHelpTheWorld {
         }
     }
 
-    public function add(array $user) {
-        if (empty($user['username']) ||
-            empty($user['password'])) {
+    public function addstaff(array $staff) {
+        if (empty($staff['Name']) || empty($staff['LoginName']) 
+            || empty($staff['Password']) || empty($staff['Telephone'])) {
             return InterfaceError::ERR_INVALIDPARAMS;
         }
 
-        $username = $user['username'];
-        $password = $user['password'];
-        $mobile = $user['mobile'];
+        $employeeid = $staff['EmployeeID'];
+        $name = $staff['Name'];
+        $sex = $staff['Sex'];
+        $password = $staff['Password'];
+        $loginname = $staff['LoginName'];
+        $email = $staff['Email'];
+        $deptid = $staff['DeptID'];
+        $telephone = $staff['Telephone'];
+        $date = date('Y-m-d');
 
-        if ($this->checkuser($username)) {
-            return InterfaceError::ERR_USERALREADYEXIST;
-        }
+        $sql = "INSERT INTO tblEmployee (EmployeeID, Name, Sex, LoginName,
+        Password, Email, DeptID, Telephone, OnboardDate) VALUES 
+        ('', '".$name."', '".$sex."', '".$loginname."','".
+        $password."', '".$email."', $deptid, '".$telephone."', $date)";
 
-        if (!empty($mobile) && $this->checkmobile($mobile)) {
-           return InterfaceError::ERR_MOBILEALREADYEXIST; 
-        }
 
-        $opt = new DBSecureOPT();
-        $secureopt_id = $opt->getSecureOPTId($user['secureopt']);
-
-        $sql = 'INSERT INTO `userinfo_base` (username, '.
-            'password, secureopt_id, jointime) VALUES '.
-            '(\''.$username.'\', \''.$password.'\', \''.
-            $secureopt_id.'\', \''.time().'\')';
         $ret = $this->runSQL($sql);
-        if (0 == $ret) {
+        if (0 == sizeof($ret)) {
             return InterfaceError::ERR_DBIO;
         }
 
-        $this->updatelastaccess($username);
-        $userinfo = $this->getinfo($username, $username);
-        return $userinfo;
+        return InterfaceError::ERR_OK;
     }
 
     public function login(array $user) {

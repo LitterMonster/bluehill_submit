@@ -21,6 +21,8 @@
                   <li class="divider">|</li>
                   <?php
                       } else {
+                      $dbmanager = new WrapperDBUser();
+                      $managername = $dbmanager->getdeptname($_COOKIE['username']);
                       ?>
                       <li>当前用户:</li>
                       <li><a href="#" class="parent"><?=$_COOKIE['username']?></a>
@@ -28,6 +30,8 @@
                           <li><a href="<?=$rootdir?>/bootstrap.php/user/signout">退出登录</a></li>
                         </ul>
                       </li>
+                      <li>所属部门:</li>
+                      <li><a href="#" class="parent"><?=$managername?></a>
                       <?php
                                  }
                                  ?>

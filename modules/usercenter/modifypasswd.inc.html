@@ -5,10 +5,12 @@
       <tbody>
         <tr><th>用户名</th><td><?=$_COOKIE['username']?></td></tr>
         <tr><th>新密码</th>
-          <td><input type="password" name="password"/></td>
+          <td><input type="password" name="password"
+                class="form-control uname"
+                placeholder="新密码"/></td>
         </tr>
         <tr>
-          <td><button type="submit">保存</button></td>
+          <td><button class="btn btn-success btn-block" type="submit">保存</button></td>
         </tr>
       </tbody>
     </table>

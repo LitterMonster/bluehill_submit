@@ -131,7 +131,75 @@ class InterfaceUser {
     public function addstaffAction()
     {
         $params = LibMisc::getParams();
+        $params['EmployeeID'] = "";
 
+        if (empty($params['Name']) || empty($params['LoginName']) 
+            || empty($params['Password']) || empty($params['Telephone']))
+        {
+                return $this->gotoAddFail(InterfaceError::ERR_INVALIDPARAMS);
+        }
+
+        $dbuser = new WrapperDBUser();
+        $ret = $dbuser->addstaff($params);
+        return $this->gotoAddstaffSuccess($ret);
+    }
+
+    private function gotoAddstaffSuccess($result)
+    {
+        global $rootdir;
+        if ($result == InterfaceError::ERR_OK)
+        {
+           print "<script >alert('新员工添加成功!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$_COOKIE['username']."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+           return $result;
+        } else if ($result == InterfaceError::ERR_DBIO){
+           print "<script >alert('新员工添加失败!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$_COOKIE['username']."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+           return $result;
+        } else if ($result == InterfaceError::ERR_INVALIDPARAMS) {
+           print "<script >alert('重要属性为空!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$_COOKIE['username']."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+           return $result;
+        }
+    }
+
+    private function gotoAddFail($result)
+    {
+        global $rootdir;
+        $params = LibMisc::getParams();
+        
+        if (empty($params['Name']))
+        {
+           print "<script >alert('真实姓名不能为空!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$_COOKIE['username']."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+           return $result;
+        } else if (empty($params['LoginName'])){
+           print "<script >alert('登陆名不能为空!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$_COOKIE['username']."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+           return $result;
+        } else if (empty($params['Password'])){
+           print "<script >alert('登陆密码不能为空!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$_COOKIE['username']."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+           return $result;
+        }  else if (empty($params['Telephone'])){
+           print "<script >alert('电话号码不能为空!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$_COOKIE['username']."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+           return $result;
+        } 
 
     }
 

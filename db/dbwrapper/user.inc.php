@@ -219,6 +219,19 @@ class WrapperDBUser {
         return $ret;
     }
 
+    public function deletestaff($params)
+    {
+        $employeeid = $params['EmployeeID'];
+        if (empty($employeeid))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $dbhtwuser = new DBHTWUser();
+        $ret = $dbhtwuser->deletestaff($params);
+        return $ret;
+    }
+
     public function getsecureinfo($requestuser, $requesteduser) {
         $dbhtwuser = new DBHTWUser();
 

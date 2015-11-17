@@ -342,6 +342,42 @@ class DBHTWUser extends DBHelpTheWorld {
         return $ret;
     }
 
+    public  function deletestaff($params)
+    {
+        $employeeid = $params['EmployeeID'];
+        $username = $params['username'];
+        $deptid = $this->getuserinfo($username)['DeptID'];
+        if (empty($employeeid))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $sql = "UPDATE tblAttendance SET RecorderID = $deptid WHERE
+        RecorderID = $employeeid";
+        $ret = $this->runSQL($sql);
+
+        $sql = "DELETE FROM tblAttendance WHERE EmployeeID = $employeeid";
+        $ret = $this->runSQL($sql);
+        
+        $sql = "DELETE FROM tblLeave WHERE EmployeeID = $employeeid";
+        $ret = $this->runSQL($sql);
+
+        $sql = "DELETE FROM tblOverTime WHERE EmployeeID = $employeeid";
+        $ret = $this->runSQL($sql);
+
+        $sql = "DELETE FROM tblPerformance WHERE EmployeeID = $employeeid";
+        $ret = $this->runSQL($sql);
+
+        $sql = "DELETE FROM tblSalary WHERE EmployeeID = $employeeid";
+        $ret = $this->runSQL($sql);
+
+        $sql = "DELETE FROM tblEmployee WHERE EmployeeID = $employeeid";
+        $ret = $this->runSQL($sql);
+       
+        return InterfaceError::ERR_OK;
+
+    }
+
     private function reorganizeSecureInfo($secureinfo) {
         if (empty($secureinfo)) {
             return $secureinfo;

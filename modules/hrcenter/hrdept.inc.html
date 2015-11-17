@@ -27,6 +27,7 @@
         <td>员工级别</td>
         <td>员工照片</td>
         <td>修改</td>
+        <td>删除</td>
       </tr>
       <?php
          $state = false;
@@ -36,26 +37,36 @@
            {
            $loginname = $deptstaff[$i]['LoginName'];
            $state = true;
-           echo "<tr>";
-           echo "<td>".$deptstaff[$i]['EmployeeID']."</td>";
-           echo "<td>".$deptstaff[$i]['Name']."</td>";
-           echo "<td>".$deptstaff[$i]['Sex']."</td>";
-           echo "<td>".$deptstaff[$i]['LoginName']."</td>";
-           echo "<td>".$deptstaff[$i]['Password']."</td>";
-           echo "<td>".$deptstaff[$i]['Email']."</td>";
-           echo "<td>".$deptname."</td>";
-           echo "<td>".$deptstaff[$i]['BasicSalary']."</td>";
-           echo "<td>".$deptstaff[$i]['Title']."</td>";
-           echo "<td>".$deptstaff[$i]['Telephone']."</td>";
-           echo "<td>".$deptstaff[$i]['OnboardDate']."</td>";
-           echo "<td>".$deptstaff[$i]['SelfIntro']."</td>";
-           echo "<td>".$deptstaff[$i]['VacationRemain']."</td>";
-           echo "<td>".$deptstaff[$i]['EmployeeLevel']."</td>";
-           echo "<td>".$deptstaff[$i]['PhotoImage']."</td>";
-           echo "<td> <form action = \""."modifystaffbase.php?LoginName=".
-           "$loginname"."&login_status=1&username=".$username."\" method = 'POST'>"."<button class=\"btn btn-success btn-block\" type='submit'>修改
-           </button></form> </td>";
-           echo "</tr>";
+           $temp = $deptstaff[$i];
+         ?>
+           <tr>
+           <td><?=$temp['EmployeeID']?></td>
+           <td><?=$temp['Name']?></td>
+           <td><?=$temp['Sex']?></td>
+           <td><?=$temp['LoginName']?></td>
+           <td><?=$temp['Password']?></td>
+           <td><?=$temp['Email']?></td>
+           <td><?=$deptname?></td>
+           <td><?=$temp['BasicSalary']?></td>
+           <td><?=$temp['Title']?></td>
+           <td><?=$temp['Telephone']?></td>
+           <td><?=$temp['OnboardDate']?></td>
+           <td><?=$temp['SelfIntro']?></td>
+           <td><?=$temp['VacationRemain']?></td>
+           <td><?=$temp['EmployeeLevel']?></td>
+           <td><?=$temp['PhotoImage']?></td>
+           <td> 
+             <form action ="modifystaffbase.php?LoginName=<?=$loginname?>&login_status=1&username=<?=$username?>"
+         method ='POST'>
+             <button class="btn btn-success btn-block" type='submit'>修改</button>
+             </form> 
+           </td>
+           <td> 
+             <button class="btn btn-success btn-block"
+                     type='submit' onclick = "judge()">删除</button>
+           </td>
+          </tr>
+         <?php
            }
          }
          if ($state == false)
@@ -64,6 +75,17 @@
     </tbody>
   </table>
   </center>
+    <script language="javascript">
+function judge() {
+  if (confirm("您确定要删除吗?")) {
+    window.location.href = 
+"<?=$rootdir?>/bootstrap.php/user/deletestaff?DeptID=<?=$deptid?>&username=<?=$username?>&EmployeeID=<?=$temp['EmployeeID']?>";
+    return true;
+  } else {
+    return false;
+  }
+}
+    </script>
   <script>
 $(function() {
   $( "#datepicker" ).datepicker({

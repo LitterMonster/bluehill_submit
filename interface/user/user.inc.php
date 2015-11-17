@@ -250,6 +250,50 @@ $username."&login_status=1";
         }
     }
 
+    public function deletestaffAction()
+    {
+        $params = LibMisc::getParams();
+        $employeeid = $params['EmployeeID'];
+        $username = $params['username'];
+
+        if (empty($employeeid) || empty($username))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+
+        $dbuser = new WrapperDBUser();
+        $ret = $dbuser->deletestaff($params);
+
+        return $this->gotoDeletestaffSuccess($ret);
+    }
+
+    public function gotoDeletestaffSuccess($ret)
+    {
+        global $rootdir;
+        $params = LibMisc::getParams();
+        $username = $params['username'];
+        $deptid = $params['DeptID']; 
+        if ($ret == InterfaceError::ERR_OK)
+        {
+            print "<script language='javascript' type = 'text/javascript'>
+                alert('删除成功!');</script>";
+            $url = "../../modules/hrcenter/importdept.php?username=".
+                    "$username"."&deptid=$deptid&login_status=".true;
+            return "<script language='javascript' type = 'text/javascript'>
+                window.location.href = '$url';</script>";
+        } else if ($ret == InterfaceError::ERR_INVALIDPARAMS){
+            $js = "<script language='javascript' type = 'text/javascript'
+                >alert('删除失败！');</script>";
+            $url = $rootdir."/modules/hrcenter/importdept.php?username=".
+                "$username"."&deptid=$deptid&login_status=".true;
+            $result = $js."<script>url=\"$url\";".
+                "window.location.href=url;".
+                "</script>";
+
+            return $result;
+        }
+    }
+
     function processLoginSuccess($ret, $failfunc) {
         $error = new InterfaceError();
 

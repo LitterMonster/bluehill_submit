@@ -1,0 +1,44 @@
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#checkovertime">核实加班信息</a></li>
+      <li><a href="#showdeptovertime">部门加班详情</a></li>
+      <li><a href="#showstaffovertime">员工加班详情</a></li>
+      <li><a href="#Excelovertime">Excel导入导出数据</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="checkovertime" class="tab active">
+        <?php include('checkovertime.inc.html'); ?>
+      </div>
+
+      <div id="showdeptovertime" class="tab">
+        <?php include('showdeptovertime.inc.html'); ?>
+      </div>
+
+      <div id="showstaffovertime" class="tab">
+        <?php include('showstaffovertime.inc.html'); ?>
+      </div>
+
+      <div id="Excelovertime" class="tab">
+        <?php include('Excelovertime.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

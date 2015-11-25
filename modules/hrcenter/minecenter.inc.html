@@ -1,3 +1,7 @@
+<?php
+    $dbuser = new WrapperDBUser();
+    $state = $dbuser->ismanager($_COOKIE['username']);
+?>
 <html>
   <div class="tabs">
     <ul class="tab-links" style="margin-left: 80px;">
@@ -6,7 +10,11 @@
       <li><a href="#leavemanager">请假管理</a></li>
       <li><a href="#attendmanager">考勤管理</a></li>
       <li><a href="#overtimemanager">加班管理</a></li>
+      <?php if ($state == InterfaceError::ERR_OK)
+                            {
+                            ?>
       <li><a href="#salarymanager">薪资管理</a></li>
+      <?php } ?>
       <li><a href="#safetymanager">安全管理</a></li>
     </ul>
 

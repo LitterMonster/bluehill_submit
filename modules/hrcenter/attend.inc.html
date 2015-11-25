@@ -1,0 +1,54 @@
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#todayattend">当日考勤明细</a></li>
+      <li><a href="#searchattend">查询员工考勤记录</a></li>
+      <li><a href="#addattend">添加员工考勤记录</a></li>
+      <li><a href="#modifyattend">修改/删除员工考勤记录</a></li>
+      <li><a href="#countattend">考勤汇总</a></li>
+      <li><a href="#Excelattend">Excel导入导出数据</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="todayattend" class="tab active">
+        <?php include('todayattend.inc.html'); ?>
+      </div>
+
+      <div id="searchattend" class="tab">
+        <?php include('searchattend.inc.html'); ?>
+      </div>
+
+      <div id="addattend" class="tab">
+        <?php include('addattend.inc.html'); ?>
+      </div>
+
+      <div id="modifyattend" class="tab">
+        <?php include('modifyattend.inc.html'); ?>
+      </div>
+
+      <div id="countattend" class="tab">
+        <?php include('countattend.inc.html'); ?>
+      </div>
+
+      <div id="Excelattend" class="tab">
+        <?php include('Excelattend.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

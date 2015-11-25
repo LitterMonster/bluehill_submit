@@ -1,0 +1,44 @@
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#definebasicsalary">制定基本薪资</a></li>
+      <li><a href="#countthismonthsalary">计算员工当月薪资</a></li>
+      <li><a href="#deptsalary">部门薪资汇总</a></li>
+      <li><a href="#staffhistorysalary">员工历史薪资</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="definebasicsalary" class="tab active">
+        <?php include('definebasicsalary.inc.html'); ?>
+      </div>
+
+      <div id="countthismonthsalary" class="tab">
+        <?php include('countthismonthsalary.inc.html'); ?>
+      </div>
+
+      <div id="deptsalary" class="tab">
+        <?php include('deptsalary.inc.html'); ?>
+      </div>
+
+      <div id="staffhistorysalary" class="tab">
+        <?php include('staffhistorysalary.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

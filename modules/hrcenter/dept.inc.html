@@ -1,0 +1,62 @@
+<?php
+    $dbuser = new WrapperDBUser();
+    $state = $dbuser->ismanager($_COOKIE['username']);
+?>
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#companytree">公司结构树</a></li>
+      <li><a href="#adddept">添加新部门</a></li>
+      <?php if ($state == InterfaceError::ERR_OK)
+                            {
+                            ?>
+      <li><a href="#modifydept">修改/删除部门</a></li>
+      <?php } ?>
+      <li><a href="#modifystaffdept">更改员工部门信息</a></li>
+      <li><a href="#viewdept">查看部门详细信息</a></li>
+      <li><a href="#printdept">打印部门详细信息</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="companytree" class="tab active">
+        <?php include('companytree.inc.html'); ?>
+      </div>
+
+      <div id="adddept" class="tab">
+        <?php include('adddept.inc.html'); ?>
+      </div>
+
+      <div id="modifystaffdept" class="tab">
+        <?php include('modifystaffdept.inc.html'); ?>
+      </div>
+
+      <div id="modifydept" class="tab">
+        <?php include('modifydept.inc.html'); ?>
+      </div>
+
+      <div id="viewdept" class="tab">
+        <?php include('viewprintdept.inc.html'); ?>
+      </div>
+
+      <div id="printdept" class="tab">
+        <?php include('printdept.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

@@ -1,0 +1,13 @@
+<html>
+  <h3>搜索员工信息</h3>
+  <form method="post" action="<?=$rootdir?>/bootstrap.php/user/searchstaff?frommobile=0&username=<?=$_COOKIE['username']?>">
+  <table class="userdata_base_label" border = "1">
+    <tbody>
+    <div>关键字<input type = "text" name = "keyword" value="" size = "60" class="form-control uname"
+         placeholder="登录名/员工ID/真实姓名"/></div>
+    <hr/>
+    <tr><button  class="btn btn-success btn-block" type = "submit">提交</button></tr>
+    </tbody>
+  </table>
+  </form>
+</html>

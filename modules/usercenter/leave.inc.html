@@ -2,14 +2,14 @@
 if (!empty($_COOKIE['username'])) {
 $username = $_COOKIE['username'];
 $dbuser = new WrapperDBUser();
-$info = $dbuser->ismanager($username);
+$state = $dbuser->ismanager($username);
 }
 ?>
 <html>
   <div class="tabs-vertical">
     <ul class="tab-vertical-links">
       <li class="active"><a href="#leaveapply">请假申请</a></li>
-      <?php if ($info == InterfaceError::ERR_OK) {?>
+      <?php if ($state == InterfaceError::ERR_OK) {?>
         <li><a href="#leavecheck">请假审核</a></li>
       <?php }?>
     </ul>

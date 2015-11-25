@@ -1,0 +1,78 @@
+
+<html>
+  <?php
+  if (!empty($_COOKIE['username'])) {
+  $username = $_COOKIE['username'];
+  $keyword = $params['keyword'];
+  $dbuser = new WrapperDBUser();
+  $staffresult = $dbuser->searchstaff($keyword);
+  }
+  ?>
+  <center>
+  <table class="userdata_base_label" border = "2">
+    <tbody>
+      <tr>
+        <td>员工ID</td>
+        <td>真实姓名</td>
+        <td>性 别</td>
+        <td>登陆名称</td>
+        <td>登陆密码</td>
+        <td>邮 箱</td>
+        <td>隶属部门</td>
+        <td>基本工资</td>
+        <td>员工职位名称</td>
+        <td>联系电话</td>
+        <td>注册日期</td>
+        <td>自我介绍</td>
+        <td>剩余年假</td>
+        <td>员工级别</td>
+        <td>员工照片</td>
+      </tr>
+      <?php
+         $state = false;
+         if ($staffresult != InterfaceError::ERR_INVALIDPARAMS)
+         {
+           for($i = 0; $i < sizeof($staffresult); $i++)
+           {
+           $deptid = $staffresult[$i]['DeptID'];
+           $deptname = $dbuser->getdeptinfo($deptid)['DeptName'];
+           $loginname = $staffresult[$i]['LoginName'];
+           $state = true;
+           $temp = $staffresult[$i];
+         ?>
+           <tr>
+           <td><?=$temp['EmployeeID']?></td>
+           <td><?=$temp['Name']?></td>
+           <td><?=$temp['Sex']?></td>
+           <td><?=$temp['LoginName']?></td>
+           <td><?=$temp['Password']?></td>
+           <td><?=$temp['Email']?></td>
+           <td><?=$deptname?></td>
+           <td><?=$temp['BasicSalary']?></td>
+           <td><?=$temp['Title']?></td>
+           <td><?=$temp['Telephone']?></td>
+           <td><?=$temp['OnboardDate']?></td>
+           <td><?=$temp['SelfIntro']?></td>
+           <td><?=$temp['VacationRemain']?></td>
+           <td><?=$temp['EmployeeLevel']?></td>
+           <td><?=$temp['PhotoImage']?></td>
+          </tr>
+         <?php
+           }
+         }
+         if ($state == false)
+         echo "<h2>没有查询到此员工信息!</h2>";
+         ?>
+    </tbody>
+  </table>
+  </center>
+  <script>
+$(function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy年mm月dd日",
+    changeMonth: true,
+    changeYear: true
+  });
+});
+  </script>
+</html>

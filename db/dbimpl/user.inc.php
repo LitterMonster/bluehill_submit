@@ -378,6 +378,48 @@ class DBHTWUser extends DBHelpTheWorld {
 
     }
 
+    public function searchstaff($params)
+    { 
+        if (is_array($params))
+        {
+            $keyword = trim($params['keyword']);
+        } else {
+            $keyword = $params;
+        }
+        if (empty($keyword))
+        {
+            return InterfaceError::ERR_INVALIDPARAMS;
+        }
+        if (!is_numeric($keyword))
+        {
+            $sql = "SELECT * FROM tblEmployee WHERE Name like '%".$keyword."%'";
+            $ret = $this->runSQL($sql);
+
+            if (empty($ret))
+            {
+                $sql = "SELECT * FROM tblEmployee WHERE LoginName like '%".
+                    $keyword."%'";
+                $ret = $this->runSQL($sql);
+
+                if (empty($ret))
+                {
+                    return InterfaceError::ERR_INVALIDPARAMS;
+                }
+                return $ret;
+            }
+            return $ret;
+        } else {
+            $sql = "SELECT * FROM tblEmployee WHERE EmployeeId = ".$keyword;
+            $ret = $this->runSQL($sql);
+
+            if (empty($ret))
+            {
+                return InterfaceError::ERR_INVALIDPARAMS;
+            }
+            return $ret;
+        }
+    }
+
     private function reorganizeSecureInfo($secureinfo) {
         if (empty($secureinfo)) {
             return $secureinfo;
@@ -747,7 +789,7 @@ class DBHTWUser extends DBHelpTheWorld {
         $userinfo = $this->getuserinfo($data['username'], $data['username']);
         $employeeID = $userinfo['EmployeeID'];
 
-        if (empty($data['password']))
+        if (empty($data['Password']))
         {
             $sql = "update tblEmployee set SelfIntro = '".$data['introduction'].
                 "' where EmployeeID = $employeeID ";
@@ -757,7 +799,7 @@ class DBHTWUser extends DBHelpTheWorld {
         }
         else
         {
-            $sql = "update tblEmployee set Password = '".$data['password'].
+            $sql = "update tblEmployee set Password = '".$data['Password'].
                 "' where EmployeeID = $employeeID ";
             $ret = $this->runSQL($sql);
 

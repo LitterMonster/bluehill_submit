@@ -1,0 +1,53 @@
+<?php
+    $dbuser = new WrapperDBUser();
+    $state = $dbuser->ismanager($_COOKIE['username']);
+?>
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#verifylogin">验证登陆者身份</a></li>
+      <?php if ($state == InterfaceError::ERR_OK)
+                            {
+                            ?>
+      <li><a href="#modifyoperator">添加/删除认识助理</a></li>
+      <?php } ?>
+      <li><a href="#modifypassword">密码修改</a></li>
+      <li><a href="#writesystemlog">系统事件记录</a></li>
+      <li><a href="#searchsystemlog">系统事件查询</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="verifylogin" class="tab active">
+        <?php include('verifylogin.inc.html'); ?>
+      </div>
+
+      <div id="modifyoperator" class="tab">
+        <?php include('modifyoperator.inc.html'); ?>
+      </div>
+
+      <div id="writesystemlog" class="tab">
+        <?php include('writesystemlog.inc.html'); ?>
+      </div>
+
+      <div id="searchsystemlog" class="tab">
+        <?php include('searchsystemlog.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

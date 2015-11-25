@@ -1,0 +1,39 @@
+<html>
+  <div class="tabs-vertical">
+    <ul class="tab-vertical-links">
+      <li class="active"><a href="#addholiday">添加国定节假日</a></li>
+      <li><a href="#showdeptleave">部门请假详情</a></li>
+      <li><a href="#showstaffleave">员工请假详情</a></li>
+    </ul>
+
+    <ul class="tab-vertical-content">
+      <div id="addholiday" class="tab active">
+        <?php include('addholiday.inc.html'); ?>
+      </div>
+
+      <div id="showdeptleave" class="tab">
+        <?php include('showdeptleave.inc.html'); ?>
+      </div>
+
+      <div id="showstaffleave" class="tab">
+        <?php include('showstaffleave.inc.html'); ?>
+      </div>
+
+    </ul>
+  </div>
+  <script>
+    jQuery(document).ready(function() {
+      jQuery('.tabs-vertical .tab-vertical-links a').on('click', function(e)  {
+        var currentAttrValue = jQuery(this).attr('href');
+
+        // Show/Hide Tabs
+        jQuery('.tabs-vertical ' + currentAttrValue).show().siblings().hide();
+
+        // Change/remove current tab to active
+        jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+        e.preventDefault();
+      });
+    });
+  </script>
+</html>

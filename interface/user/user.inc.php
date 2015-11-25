@@ -142,6 +142,43 @@ class InterfaceUser {
         return $this->gotoAddstaffSuccess($ret);
     }
 
+    public function searchstaffAction()
+    {
+        $params = LibMisc::getParams();
+        $keyword = trim($params['keyword']);
+        if (empty($keyword))
+        {
+            return $this->gotoSearchFail(InterfaceError::ERR_INVALIDPARAMS);
+        }
+
+        $dbuser = new WrapperDBUser();
+        $ret = $dbuser->searchstaff($params);
+        return $this->gotoSearchstaffSuccess($ret);
+    }
+
+    private function gotoSearchstaffSuccess($result)
+    {
+        global $rootdir;
+        $params = LibMisc::getParams();
+        $username = $params['username'];
+        $keyword = trim($params['keyword']);
+        if ($result == InterfaceError::ERR_INVALIDPARAMS)
+        {
+           print "<script >alert('搜索结果为空!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$username."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+
+           return $result;
+        } else {
+           $url = "$rootdir/modules/hrcenter/searchresult.php?username=".
+$username."&login_status=1&keyword=$keyword";
+           $result = "<script >window.location.href = '$url';</script>";
+
+           return $result;
+        }
+    }
+
     private function gotoAddstaffSuccess($result)
     {
         global $rootdir;
@@ -201,6 +238,23 @@ $username."&login_status=1";
            $result = "<script >window.location.href = '$url';</script>";
            return $result;
         } 
+    }
+
+    private function gotoSearchFail($result)
+    {
+        global $rootdir;
+        $params = LibMisc::getParams();
+        $username = $params['username'];
+
+        if ($result == InterfaceError::ERR_INVALIDPARAMS)
+        {
+           print "<script >alert('搜索字段不能为空!');</script>";
+           $url = "$rootdir/modules/hrcenter/minecenter.php?username=".
+$username."&login_status=1";
+           $result = "<script >window.location.href = '$url';</script>";
+
+           return $result;
+        }
 
     }
 
@@ -394,7 +448,7 @@ $username."&login_status=1";
     
         $userdata = array(
             "username"=>$params['username'],
-            "password"=>$params['password'],
+            "Password"=>$params['Password'],
             "introduction"=>$params['introduction']); 
         $dbuser = new WrapperDBUser();
         $ret = $dbuser->updateuserdata($userdata);

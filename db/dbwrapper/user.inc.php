@@ -232,6 +232,21 @@ class WrapperDBUser {
         return $ret;
     }
 
+    public function searchstaff($params)
+    {
+        if (is_array($params))
+        {
+            $keyword = trim($params['keyword']);
+            if (empty($keyword))
+            {
+                return InterfaceError::ERR_INVALIDPARAMS;
+            }
+        }
+        $dbhtwuser = new DBHTWUser();
+        $ret = $dbhtwuser->searchstaff($params);
+        return $ret;
+    }
+
     public function getsecureinfo($requestuser, $requesteduser) {
         $dbhtwuser = new DBHTWUser();
 
